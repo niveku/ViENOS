@@ -4,6 +4,7 @@ from dash.dependencies import Input, Output
 
 # Connection to main file
 from app import app
+from app import server
 # Connecion to apps files
 from apps import meteo
 
