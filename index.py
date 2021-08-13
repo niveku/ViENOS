@@ -8,16 +8,9 @@ from app import server
 # Connecion to apps files
 from apps import meteo
 
-h=0
-
 app.layout = html.Div(
-    id = 'ENOS_APP',
-    style={
-        'box-sizing': 'border-box',
-        'max-height': '100%',
-        'max-width': '100%',
-        },
-        
+    id='ENOS_APP',
+    style={},
     children=[
         dcc.Location(id='url', refresh=False),
         html.Div(
@@ -25,8 +18,6 @@ app.layout = html.Div(
             children=[],
             style={
                 'box-sizing': 'border-box',
-                'height': '100%',
-                'max-height': '98vh',
                 'border': '1px solid black',
                 'padding': '10px',
             },
@@ -34,15 +25,16 @@ app.layout = html.Div(
     ],
 )
 
+
 @app.callback(Output('page-content', 'children'),
               Input('url', 'pathname'))
 def display_page(pathname):
     if pathname.startswith('/meteo'):
         return meteo.layout
-    #elif pathname == '/frcst_meteo':
+    # elif pathname == '/frcst_meteo':
     #    return meteo.layout
     else:
-        return ([   
+        return ([
             dcc.Link('Meorología', href='/meteo/temp'),
             html.Br(),
             dcc.Link('Pronóstico meorología', href='/frcst_meteo'),
@@ -52,6 +44,7 @@ def display_page(pathname):
             dcc.Link('Pronóstico Oceanografía', href='/frcst_oceano'),
             html.Br(),
         ])
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)
