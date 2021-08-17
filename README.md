@@ -1,4 +1,4 @@
-#ViENOS App
+# ViENOS App
 
 VIENOS is a DIMAR project focused on monitoring the 
 "El niño" phenomenon in Tumaco, Colombia.
@@ -6,7 +6,7 @@ VIENOS is a DIMAR project focused on monitoring the
 This app is running using python, plotly,
 dash and pandas as its main resources
 
-##USAGE
+## USAGE
 
 This app is initially going to be deployed in 
 https://vienos.herokuapp.com/ to open visualization.

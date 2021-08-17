@@ -10,13 +10,13 @@ from apps import meteo
 
 app.layout = html.Div(
     id='ENOS_APP',
-    style={},
     children=[
         dcc.Location(id='url', refresh=False),
         html.Div(
             id='page-content',
             children=[],
             style={
+                'height': '100%',
                 'box-sizing': 'border-box',
                 'border': '1px solid black',
                 'padding': '10px',

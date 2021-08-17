@@ -53,10 +53,9 @@ def figure(df, pathname, tipo):
         fig.update_layout(
             hovermode="x",
             autosize=True,
-            margin=dict(l=0, r=0, b=5, t=0),
+            margin=dict(l=0, r=0, b=25, t=0),
             # paper_bgcolor="LightBlue",
         )
-
     else:
 
         fig.update_layout(

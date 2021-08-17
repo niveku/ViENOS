@@ -334,6 +334,25 @@ th:last-child,
 td:last-child {
   padding-right: 0; }
 
+td.CalendarDay {
+  padding: 0;
+}
+
+.dash-table-container{
+    display: flex;
+    max-height: calc(90vh - 30px);
+    flex-direction: column;
+    flex-shrink: 1;
+    flex-basis: 100%;
+}
+
+.dash-table-container .row{
+    margin: 0;
+
+}
+.dash-spreadsheet.dash-freeze-top, .dash-spreadsheet.dash-virtualized{
+    max-height: unset;
+}
 
 /* Spacing
 –––––––––––––––––––––––––––––––––––––––––––––––––– */

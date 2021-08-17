@@ -102,10 +102,17 @@ time_options = dcc.RadioItems(
 )
 
 tabla = dash_table.DataTable(id='table',
+                             columns=[{"name": i, "id": i} for i in df.columns],
+                             data=df.round(2).to_dict('records'),
+
+                             fixed_rows={'headers': True},
+                             virtualization=True,
+                             # page_action='native',
+                             # page_size=22,
+                             sort_action="native",
+
                              style_cell={
                                  'whiteSpace': 'normal',
-                                 'height': 'auto',
-                                 'width': 'auto',
                                  'textAlign': 'center',
                              },
                              style_header={
@@ -114,22 +121,9 @@ tabla = dash_table.DataTable(id='table',
                                  'backgroundColor': 'rgb(100, 100, 100)',
                              },
                              style_table={
-                                 'display': 'flex',
-                                 'height': '88vh',
-                                 'width': '95%',
-                                 'marginLeft': 'auto',
-                                 'marginRight': 'auto',
-                                 # 'marginTop': '5px',
-                                 'overflowY': 'hidden',
-                                 'overflowX': 'hidden',
+                                 # 'max-height': 'calc(80vh - 60px)',
+                                 'overflowY': 'auto',
                              },
-                             columns=[{"name": i, "id": i} for i in df.columns],
-                             data=df.round(2).to_dict('records'),
-                             fixed_rows={'headers': True},
-                             virtualization=True,
-                             page_action='native',
-                             # page_size=12,
-                             sort_action="native",
                              )
 
 graph = dcc.Graph(
@@ -140,9 +134,8 @@ graph = dcc.Graph(
         'displayModeBar': False,
     },
     style={
-        'min-height': '200px',
-        'height': '100%',
         'width': '100%',
+        'height': '100%',
     },
 )
 
@@ -154,7 +147,8 @@ opciones_descarga = dcc.Dropdown(
         {'label': 'JSON (.json)', 'value': 'json'},
     ],
     style={
-        'width': '350px',
+        'width': 'auto',
+        'min-width': '250px',
     },
     value='excel',
     placeholder="Seleciona un formato:",
@@ -168,10 +162,8 @@ bt_descarga = html.Div(
         'box-sizing': 'border-box',
         'display': 'flex',
         'justify-content': 'center',
-        'height': 'auto',
-        'marginTop': '40px',
-        'marginLeft': 'auto',
-        'marginRight': 'auto',
+        'align-items': 'center',
+        'flex-wrap': 'wrap',
     },
     children=[
         opciones_descarga,
@@ -185,20 +177,17 @@ bt_descarga = html.Div(
 layout = html.Div(
     id='App_Meteo',
     style={
+        'height': 'calc(98vh - 30px)',
         'box-sizing': 'border-box',
-        # 'display': 'flex',
-        # 'flex-direction': 'column',
-        'max-height': '100vh',
-        'min-height': '0',
-        'height': '100%',
-        'width': '100%',
-        'border': '1px solid red',
+        'display': 'flex',
+        'flex-direction': 'column',
     },
     children=[
 
         html.Div(id='Contenedor_Principal', children=[],
                  style={
                      'display': 'flex',
+                     'flex-direction': 'column',
                      'flex-shrink': '1',
                      'flex-basis': '100%',
                  },
@@ -211,8 +200,6 @@ layout = html.Div(
                 'justify-content': 'space-evenly',
                 'align-items': 'center',
                 'flex-wrap': 'wrap',
-                'height': 'auto',
-                'min-height': '0',
                 'padding': '2px',
                 'border': '1px solid black',
                 'background': 'rgb(243,146,56)',
