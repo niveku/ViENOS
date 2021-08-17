@@ -10,20 +10,22 @@ def figure(df, pathname, tipo):
 
     # ------Variable URL Selector--------
 
+    line = dict(shape='linear', color='black', width=1,)
+
     if pathname == '/prcp':
         variable = 'Prcp'
-        fig = go.Figure(data=go.Scatter(x=df.Time, y=df.Prcp, mode='lines+markers'))
+        fig = go.Figure(data=go.Scatter(x=df.Time, y=df.Prcp, mode='lines+markers', line=line, marker_size=3))
         fig.update_yaxes(title_text='Precipitaciones (mL)', zeroline=True, showline=True)
     elif pathname == '/wvel':
         variable = 'Wvel'
-        fig = go.Figure(data=go.Scatter(x=df.Time, y=df.Wvel, mode='lines+markers'))
+        fig = go.Figure(data=go.Scatter(x=df.Time, y=df.Wvel, mode='lines+markers', line=line, marker_size=3))
         fig.update_yaxes(title_text='Velocidad del Viento (m/s)', zeroline=True, showline=True)
     elif pathname == '/wdir':
         df2 = windrose.rose_df(df, mode=0)
         fig = px.bar_polar(df2, r="frequency", theta="direction", color="speed",
                            color_discrete_sequence=misc.color_pallete(5))  # px.colors.diverging.Spectral_r)
     else:
-        fig = go.Figure(data=go.Scatter(x=df.Time, y=df.Temp, mode='lines+markers', line_color="black"))
+        fig = go.Figure(data=go.Scatter(x=df.Time, y=df.Temp, mode='lines+markers', line=line, marker_size=3))
         fig.update_yaxes(title_text='Temperatura (C°)', zeroline=True, showline=True)
 
     # ----------Max/Min Annotations----------

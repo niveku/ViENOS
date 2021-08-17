@@ -17,9 +17,9 @@ app.layout = html.Div(
             children=[],
             style={
                 'height': '100%',
+                # 'width': '100vw',
                 'box-sizing': 'border-box',
                 'border': '1px solid black',
-                'padding': '10px',
             },
         ),
     ],

@@ -96,8 +96,10 @@ time_options = dcc.RadioItems(
     ],
     value='Horaria',
     labelStyle={
+        'box-sizing': 'border-box',
         'display': 'inline-block',
-        # 'text-align': 'justify'
+        'padding': '5px',
+        'text-align': 'justify'
     },
 )
 
@@ -105,8 +107,8 @@ tabla = dash_table.DataTable(id='table',
                              columns=[{"name": i, "id": i} for i in df.columns],
                              data=df.round(2).to_dict('records'),
 
-                             fixed_rows={'headers': True},
-                             virtualization=True,
+                             # fixed_rows={'headers': True},
+                             # virtualization=True,
                              # page_action='native',
                              # page_size=22,
                              sort_action="native",
@@ -116,12 +118,13 @@ tabla = dash_table.DataTable(id='table',
                                  'textAlign': 'center',
                              },
                              style_header={
+                                 'margin': '0px',
                                  'fontWeight': 'bold',
                                  'color': 'white',
                                  'backgroundColor': 'rgb(100, 100, 100)',
                              },
                              style_table={
-                                 # 'max-height': 'calc(80vh - 60px)',
+                                 # 'max-height': 'calc(90vh - 10px)',
                                  'overflowY': 'auto',
                              },
                              )
@@ -177,8 +180,8 @@ bt_descarga = html.Div(
 layout = html.Div(
     id='App_Meteo',
     style={
-        'height': 'calc(98vh - 30px)',
         'box-sizing': 'border-box',
+        'height': 'calc(100vh - 30px)',
         'display': 'flex',
         'flex-direction': 'column',
     },
@@ -186,10 +189,14 @@ layout = html.Div(
 
         html.Div(id='Contenedor_Principal', children=[],
                  style={
+                     'box-sizing': 'border-box',
                      'display': 'flex',
                      'flex-direction': 'column',
                      'flex-shrink': '1',
                      'flex-basis': '100%',
+                     'margin-right': '10px',
+                     'margin-top': '10px',
+                     'margin-bottom': '4px',
                  },
                  ),
         html.Div(
@@ -205,14 +212,30 @@ layout = html.Div(
                 'background': 'rgb(243,146,56)',
             },
             children=[
-                html.P('Rango De Fechas:', style={
-                    'margin-bottom': '0.1rem',
-                    'font-weight': 'bold', }),
-                datepicker,
-                html.P('Agrupación temporal:', style={
-                    'margin-bottom': '0.1rem',
-                    'font-weight': 'bold', }),
-                time_options,
+                html.Div(
+                    style={
+                        'display': 'inline-flex',
+                        'align-items': 'center',
+                    },
+                    children=[
+                        html.P('Rango De Fechas:    ', style={
+                            'margin-bottom': '0.1rem',
+                            'font-weight': 'bold', }),
+                        datepicker,
+                    ]
+                ),
+                html.Div(
+                    style={
+                        'display': 'inline-flex',
+                        'align-items': 'center',
+                    },
+                    children=[
+                        html.P('Agrupación temporal:', style={
+                            'margin-bottom': '0.1rem',
+                            'font-weight': 'bold', }),
+                        time_options,
+                    ]
+                ),
             ]),
     ])
 
@@ -241,6 +264,15 @@ def update_graph(tipo, start_date, end_date, pathname):
         cols = ['Temp', 'Prcp', 'Wvel']
         (styles, legend) = misc.discrete_background_color_bins(data[cols])  # Table Style
         tabla.style_data_conditional = styles
+        dict_cols = {'Time': 'Fecha/Hora',
+                     'Temp': 'Temperatura(C°)',
+                     'Prcp': 'Precipitación(mm)',
+                     'Wvel': 'Velocidad del viento(m/s)',
+                     'Wdir': 'Dirección del viento(°)',
+                     'Long': 'Longitud',
+                     'Lat': 'Latitud',
+                     }
+        tabla.columns = [{"name": dict_cols[i], "id": i} for i in data.columns]
         tabla.data = data.round(2).to_dict('records')
         return [tabla, bt_descarga]
 
