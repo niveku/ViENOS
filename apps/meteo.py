@@ -102,7 +102,7 @@ def update_graph(tipo, start_date, end_date, pathname):
 
     global data
     pathname = pathname.strip().replace('/meteo/', '').lower()
-    appid = 'Meteo'
+    section = 'Meteo'
 
     # --------Date Filter/Group---------
 
@@ -121,7 +121,7 @@ def update_graph(tipo, start_date, end_date, pathname):
 
     else:
         try:
-            fig, data = graphs.figure(data, pathname, tipo)
+            fig, data = graphs.figure(data, section, pathname, tipo)
             graph.figure = fig
             return [graph]
         except:

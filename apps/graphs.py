@@ -5,14 +5,13 @@ import pandas as pd
 from apps import windrose, misc
 
 
-def figure(df, pathname, tipo):
+def figure(df, section, pathname, tipo):
 
     # ------Variable Format--------
 
     variable = pathname.capitalize()   # Controls the column to show
     if variable in ["Sst", "Ss"]:
         variable = variable.upper()
-    valid_colums = ["Temp", 'Prcp', 'Wvel', 'Wdir', 'SST', 'SS', 'Depth']
 
     # ------Graph Generation--------
 
@@ -22,7 +21,7 @@ def figure(df, pathname, tipo):
         df2 = windrose.rose_df(df, mode=0)
         fig = px.bar_polar(df2, r="frequency", theta="direction", color="speed",
                            color_discrete_sequence=misc.color_pallete(5))  # px.colors.diverging.Spectral_r)
-    elif variable in valid_colums:
+    elif misc.column_is_valid(section, variable):
         y_title = misc.get_col_title(variable)
         fig = go.Figure(data=go.Scatter(x=df.Time, y=df[variable], mode='lines+markers', line=line, marker_size=3))
         fig.update_yaxes(title_text=y_title, zeroline=True, showline=True)

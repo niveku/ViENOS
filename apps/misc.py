@@ -25,6 +25,19 @@ def get_col_title(key):
     return dict_cols[key]
 
 
+def column_is_valid(section, column):
+    valid_colums = []
+    if section == 'Meteo':
+        valid_colums = ["Temp", 'Prcp', 'Wvel', 'Wdir']
+    elif section == 'Ocean':
+        valid_colums = ['SST', 'SS', 'Depth']
+
+    if column in valid_colums:
+        return True
+    else:
+        return False
+
+
 def carga_df(file_name):
     path = pathlib.Path(__file__).parent
     data_path = path.joinpath("../datasets").resolve()

@@ -18,16 +18,7 @@ datepicker = components.create_datepicker(df.Time.min(), df.Time.max())
 time_options = components.create_time_options(['Quincenal', 'Mensual'])
 mini = int(df.Depth.min())-1
 maxi = int(df.Depth.max())
-range_slider = dcc.RangeSlider(
-    id='depth_slider',
-    min=mini,
-    max=maxi,
-    step=1,
-    marks={i: "{}m".format(i) for i in range(mini, maxi+1, 10)},
-    allowCross=False,
-    value=[mini, maxi],
-
-)
+range_slider = components.create_range_slider(df.Depth, 'depth_slider')
 graph = components.create_graph()
 tabla = components.create_table(df)
 dl_options = components.create_options_downloads()
@@ -121,12 +112,11 @@ layout = html.Div(
      Input("depth_slider", "value"),
      Input('url', 'pathname')]
 )
-def update_graph(tipo, start_date, end_date, slider, pathname):
+def update_graph(tipo, start_date, end_date, slider_values, pathname):
 
     global data
     pathname = pathname.strip().replace('/ocean/', '').lower()
-    print(slider)
-    appid = 'Ocean'
+    section = 'Ocean'
 
     # --------Date Filter/Group---------
 
@@ -145,7 +135,7 @@ def update_graph(tipo, start_date, end_date, slider, pathname):
 
     else:
         try:
-            fig, data = graphs.figure(data, pathname, tipo)
+            fig, data = graphs.figure(data, section, pathname, tipo)
             graph.figure = fig
             return [graph]
 

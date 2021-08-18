@@ -50,6 +50,21 @@ def create_time_options(lst_options):
     return time_options
 
 
+def create_range_slider(column, item_id):
+    mini = int(column.min()) - 1
+    maxi = int(column.max())
+    range_slider = dcc.RangeSlider(
+        id=item_id,
+        min=mini,
+        max=maxi,
+        step=1,
+        marks={i: "{}m".format(i) for i in range(mini, maxi + 1, 10)},
+        allowCross=False,
+        value=[mini, maxi],
+    )
+    return range_slider
+
+
 def create_graph():
     graph = dcc.Graph(
         id="time-series-chart",
