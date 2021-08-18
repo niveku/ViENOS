@@ -37,13 +37,24 @@ def display_page(pathname):
         return ocean.layout
     else:
         return ([
-            dcc.Link('Meorología', href='/meteo/temp'),
+            html.H6('Meorología', className='main_menu'),
+            dcc.Link('- Temperatura', href='/meto/temp', className='sub_menu'),
             html.Br(),
-            dcc.Link('Pronóstico meorología', href='/frcst_meteo'),
+            dcc.Link('- Precipitación', href='/meto/prcp', className='sub_menu'),
             html.Br(),
-            dcc.Link('Oceanografía', href='/ocean/sst'),
+            dcc.Link('- Velocidad Del Viento', href='/meto/wvel', className='sub_menu'),
             html.Br(),
-            dcc.Link('Pronóstico Oceanografía', href='/frcst_oceano'),
+            dcc.Link('- Rosa de Vientos', href='/meto/wdir', className='sub_menu'),
+            html.Br(),
+            dcc.Link('- Pronóstico meorología', href='/frcst_meteo', className='sub_menu'),
+            html.Br(),
+            html.Br(),
+            html.H6('Oceanografía', className='main_menu'),
+            dcc.Link('- Temperatura Superficial del Mar', href='/ocean/sst', className='sub_menu'),
+            html.Br(),
+            dcc.Link('- Salinidad', href='/ocean/ss', className='sub_menu'),
+            html.Br(),
+            dcc.Link('- Pronóstico Oceanografía', href='/frcst_oceano', className='sub_menu'),
             html.Br(),
         ])
 

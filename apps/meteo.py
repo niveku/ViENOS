@@ -106,7 +106,7 @@ def update_graph(tipo, start_date, end_date, pathname):
 
     # --------Date Filter/Group---------
 
-    mask = misc.date_filter(df, start_date, end_date)
+    mask = misc.data_filter(df.Time, start_date, end_date)
     data = misc.data_tipo(df, tipo, mask)
 
     # ------- FIGURE/TABLE

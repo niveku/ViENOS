@@ -52,15 +52,15 @@ def carga_df(file_name):
     return dataframe
 
 
-def date_filter(data_df, start_date, end_date):
-    mask = data_df.Time.notnull()
+def data_filter(df_column, start, end):
+    mask = df_column.notnull()
 
-    if start_date and end_date:
-        mask = (data_df.Time >= start_date) & (data_df.Time < end_date)
-    elif start_date:
-        mask = data_df.Time >= start_date
-    elif end_date:
-        mask = data_df.Time < end_date
+    if start and end:
+        mask = (df_column >= start) & (df_column < end)
+    elif start:
+        mask = df_column >= start
+    elif end:
+        mask = df_column < end
 
     return mask
 

@@ -120,7 +120,9 @@ def update_graph(tipo, start_date, end_date, slider_values, pathname):
 
     # --------Date Filter/Group---------
 
-    mask = misc.date_filter(df, start_date, end_date)
+    mask_date = misc.data_filter(df.Time, start_date, end_date)
+    mask_depth = misc.data_filter(df.Depth, slider_values[0], slider_values[1]+1)
+    mask = mask_date & mask_depth
     data = misc.data_tipo(df, tipo, mask)
 
     # ------- FIGURE/TABLE
