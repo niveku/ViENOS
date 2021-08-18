@@ -6,7 +6,7 @@ from dash.dependencies import Input, Output
 from app import app
 from app import server
 # Connecion to apps files
-from apps import meteo
+from apps import meteo, ocean
 
 app.layout = html.Div(
     id='ENOS_APP',
@@ -33,13 +33,15 @@ def display_page(pathname):
         return meteo.layout
     # elif pathname == '/frcst_meteo':
     #    return meteo.layout
+    elif pathname.startswith('/ocean'):
+        return ocean.layout
     else:
         return ([
             dcc.Link('Meorología', href='/meteo/temp'),
             html.Br(),
             dcc.Link('Pronóstico meorología', href='/frcst_meteo'),
             html.Br(),
-            dcc.Link('Oceanografía', href='/oceano'),
+            dcc.Link('Oceanografía', href='/ocean/sst'),
             html.Br(),
             dcc.Link('Pronóstico Oceanografía', href='/frcst_oceano'),
             html.Br(),

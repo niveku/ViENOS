@@ -1,7 +1,79 @@
 import dash_html_components as html
 import colorlover
-# import pandas as pd
+import pathlib
+import pandas as pd
+from numpy import nan
 # import mysql.connector as connector
+
+dict_cols = {
+    'Time': 'Fecha/Hora',
+    'Temp': 'Temperatura(C°)',
+    'Prcp': 'Precipitación(mL)',
+    'Wvel': 'Velocidad del viento(m/s)',
+    'Wdir': 'Dirección del viento(°)',
+    'SST': 'Temp. Superficial del Mar(C°)',
+    'SS': 'Salinidad',
+    'Depth': 'Profundidad(m)',
+    'Long': 'Longitud',
+    'Lat': 'Latitud',
+}
+
+# ----------DATA MANAGEMENT-------------------------------
+
+
+def get_col_title(key):
+    return dict_cols[key]
+
+
+def carga_df(file_name):
+    path = pathlib.Path(__file__).parent
+    data_path = path.joinpath("../datasets").resolve()
+    dataframe = pd.read_csv(data_path.joinpath(file_name))
+    dataframe['Time'] = pd.to_datetime(dataframe['Time'])
+    dataframe.replace(-99999, nan, inplace=True)
+    if 'Depth' in dataframe.columns:
+        dataframe['Depth'] = dataframe.Depth.astype(int)
+        dataframe.sort_values(["Time", "Depth"], inplace=True)
+    else:
+        dataframe.sort_values("Time", inplace=True)
+    return dataframe
+
+
+def date_filter(data_df, start_date, end_date):
+    mask = data_df.Time.notnull()
+
+    if start_date and end_date:
+        mask = (data_df.Time >= start_date) & (data_df.Time < end_date)
+    elif start_date:
+        mask = data_df.Time >= start_date
+    elif end_date:
+        mask = data_df.Time < end_date
+
+    return mask
+
+
+def data_tipo(df, tipo, mask):
+    if tipo == 'Diaria' or tipo == 'Quincenal':
+        df2 = df[mask].groupby(df.Time.dt.date).mean().round(2).reset_index()
+        # data['Fecha'] = data.Time.dt.strftime('%d de %B del %Y')
+    elif tipo == 'Semanal':
+        df2 = df[mask].groupby(df.Time.dt.strftime('%Y:%W')).mean().round(2).reset_index()
+        # data['Fecha'] = data.Time.dt.strftime('Semana %W del %Y')
+    # elif tipo == 'Quincenal':
+    #     df2 = df[mask].groupby(df.Time.dt.strftime('%Y:%d')).mean().round(2).reset_index()
+    #     # data['Fecha'] = data.Time.dt.strftime('Semana %W del %Y')
+    elif tipo == 'Mensual':
+        df2 = df[mask].groupby(df.Time.dt.strftime('%B %Y')).mean().round(2).reset_index()
+        # data['Fecha'] = data.Time.dt.strftime('%B del %Y')
+    elif tipo == 'Anual':
+        df2 = df[mask].groupby(df.Time.dt.strftime('%Y')).mean().round(2).reset_index()
+        # data['Fecha'] = data.Time.dt.strftime('Año %Y')
+    else:
+        df2 = df[mask].round(2)
+
+    df2.sort_values('Time', inplace=True)  # Messy lines fix
+
+    return df2
 
 
 def color_pallete(n_bins=5):

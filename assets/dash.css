@@ -316,6 +316,16 @@ ol ul {
 li {
   margin-bottom: 1rem; }
 
+/* Range Slider
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+#depth_slider {
+    min-width: 300px;
+}
+
+.rc-slider-mark-text-active {
+    color: black;
+}
 /* Date Picker
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .DateRangePickerInput {
@@ -355,14 +365,20 @@ td.CalendarDay {
   padding: 0;
 }
 
-.dash-spreadsheet.dash-freeze-top, .dash-spreadsheet.dash-virtualized{
-    max-height: unset;
+.dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner.dash-fill-width .cell-0-1, .dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner.dash-fill-width .cell-1-1 {
+    flex: 1 0 auto;
+    height: inherit !important;
+}
+
+.dash-spreadsheet.dash-freeze-top, .dash-spreadsheet.dash-virtualized, cell cell-1-1 dash-fixed-content{
+    height: inherit !important;
+    max-height: inherit !important;
 }
 
 .dash-table-container{
     position: relative;
     display: flex;
-    max-height: 100%;
+    max-height: calc(90vh - 40px) !important;
     flex-direction: column;
     flex-shrink: 1;
     flex-basis: 100%;
