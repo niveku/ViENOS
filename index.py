@@ -52,7 +52,7 @@ def display_page(pathname):
             html.Br(),
             html.Br(),
             html.H6('Oceanografía', className='main_menu'),
-            dcc.Link('- Temperatura Superficial del Mar', href='/ocean/sst', className='sub_menu'),
+            dcc.Link('- Temperatura del Mar', href='/ocean/sst', className='sub_menu'),
             html.Br(),
             dcc.Link('- Salinidad', href='/ocean/ss', className='sub_menu'),
             html.Br(),

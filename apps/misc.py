@@ -11,7 +11,7 @@ dict_cols = {
     'Prcp': 'Precipitación(mL)',
     'Wvel': 'Velocidad del viento(m/s)',
     'Wdir': 'Dirección del viento(°)',
-    'SST': 'Temp. Superficial del Mar(C°)',
+    'SST': 'Temp. del Mar(C°)',
     'SS': 'Salinidad',
     'Depth': 'Profundidad(m)',
     'Long': 'Longitud',

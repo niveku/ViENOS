@@ -133,7 +133,7 @@ def update_graph(tipo, start_date, end_date, slider_values, pathname):
         tabla.style_data_conditional = styles
         tabla.columns = [{"name": misc.get_col_title(i), "id": i} for i in data.columns]
         tabla.data = data.round(2).to_dict('records')
-        return [tabla, dl_section]
+        return [tabla]  # , dl_section]
 
     else:
         try:
