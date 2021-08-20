@@ -70,17 +70,16 @@ def data_tipo(df, tipo, mask):
         df2 = df[mask].groupby(df.Time.dt.date).mean().round(2).reset_index()
         # data['Fecha'] = data.Time.dt.strftime('%d de %B del %Y')
     elif tipo == 'Semanal':
-        df2 = df[mask].groupby(df.Time.dt.strftime('%Y:%W')).mean().round(2).reset_index()
-        # data['Fecha'] = data.Time.dt.strftime('Semana %W del %Y')
+        df2 = df[mask].groupby(df.Time.dt.strftime('%Y:S%w')).mean().round(2).reset_index()
     # elif tipo == 'Quincenal':
     #     df2 = df[mask].groupby(df.Time.dt.strftime('%Y:%d')).mean().round(2).reset_index()
-    #     # data['Fecha'] = data.Time.dt.strftime('Semana %W del %Y')
+    elif tipo == 'Trimestral':
+        df2 = df[mask].groupby(pd.PeriodIndex(df.Time, freq='Q')).mean().round(2).reset_index()
+        df2.Time = df2.Time.astype(str).str.replace('Q', ':T')
     elif tipo == 'Mensual':
-        df2 = df[mask].groupby(df.Time.dt.strftime('%B %Y')).mean().round(2).reset_index()
-        # data['Fecha'] = data.Time.dt.strftime('%B del %Y')
+        df2 = df[mask].groupby(df.Time.dt.strftime('%m/%Y')).mean().round(2).reset_index()
     elif tipo == 'Anual':
         df2 = df[mask].groupby(df.Time.dt.strftime('%Y')).mean().round(2).reset_index()
-        # data['Fecha'] = data.Time.dt.strftime('Año %Y')
     else:
         df2 = df[mask].round(2)
 

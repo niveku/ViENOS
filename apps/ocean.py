@@ -15,7 +15,7 @@ data = df.copy()
 # --------- COMPONENTS -----------------
 
 datepicker = components.create_datepicker(df.Time.min(), df.Time.max())
-time_options = components.create_time_options(['Quincenal', 'Mensual'])
+time_options = components.create_time_options(['Quincenal', 'Mensual', 'Trimestral'])
 mini = int(df.Depth.min())-1
 maxi = int(df.Depth.max())
 range_slider = components.create_range_slider(df.Depth, 'depth_slider')

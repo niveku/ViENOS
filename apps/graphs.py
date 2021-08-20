@@ -47,10 +47,11 @@ def figure(df, section, pathname, tipo):
         fig.update_xaxes(range=[df.Time.min(), df.Time.max()])
         # fig.update_xaxes(rangeslider_visible=True) #SLIDER
 
-        if tipo == 'Diaria':
+        if tipo == 'Diaria' or tipo == 'Quincenal':
             fig.update_xaxes(tickformat='%d/%m/%Y')
             df["Time"] = pd.to_datetime(df.Time).dt.strftime('%Y/%m/%d')
-        if tipo == 'Horaria':
+
+        elif tipo == 'Horaria':
             fig.update_xaxes(tickformat='%d/%m/%Y - %H:%M')
             df["Time"] = df.Time.dt.strftime('%Y/%m/%d - %H:%M')
 
@@ -60,7 +61,7 @@ def figure(df, section, pathname, tipo):
 
             maximo = round(df[variable].max(), 2)
             minimo = round(df[variable].min(), 2)
-            std = df[variable].std() / 4
+            std = df[variable].std() / 10
             # ---Max---
             fig.add_hline(y=maximo, line_width=3, line_dash="dash", line_color="red")
             fig.add_hrect(y0=maximo - std, y1=maximo + std,
