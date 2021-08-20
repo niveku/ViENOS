@@ -93,6 +93,7 @@ layout = html.Div(
                             'margin-bottom': '0.1rem',
                             'font-weight': 'bold', }),
                         range_slider,
+                        html.Div(id='output-range-slider')
                     ]
                 ),
 
@@ -106,6 +107,7 @@ layout = html.Div(
 
 @app.callback(
     Output("Main_ocean", "children"),
+    Output('output-range-slider', 'children'),
     [Input("tipo", "value"),
      Input("Date_Picker", "start_date"),
      Input("Date_Picker", "end_date"),
@@ -133,16 +135,16 @@ def update_graph(tipo, start_date, end_date, slider_values, pathname):
         tabla.style_data_conditional = styles
         tabla.columns = [{"name": misc.get_col_title(i), "id": i} for i in data.columns]
         tabla.data = data.round(2).to_dict('records')
-        return [tabla]  # , dl_section]
+        return [tabla], f"{slider_values}m"  # , dl_section]
 
     else:
         try:
             fig, data = graphs.figure(data, section, pathname, tipo)
             graph.figure = fig
-            return [graph]
+            return [graph], f"{slider_values}m"
 
         except:
-            return html.Div("Error 404")
+            return html.Div("Error 404"), f"{slider_values}m"
 
 
 @app.callback(

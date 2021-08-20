@@ -60,6 +60,7 @@ def create_range_slider(column, item_id):
         step=1,
         marks={i: "{}m".format(i) for i in range(mini, maxi + 1, 10)},
         allowCross=False,
+        pushable=1,
         value=[mini, maxi],
     )
     return range_slider
