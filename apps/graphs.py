@@ -61,6 +61,7 @@ def figure(df, section, pathname, tipo):
 
             maximo = round(df[variable].max(), 2)
             minimo = round(df[variable].min(), 2)
+            promedio = round(df[variable].mean(), 2)
             std = df[variable].std() / 10
             # ---Max---
             fig.add_hline(y=maximo, line_width=3, line_dash="dash", line_color="red")
@@ -76,6 +77,10 @@ def figure(df, section, pathname, tipo):
                           annotation_font_size=18, annotation_font_color="black",
                           annotation_position="top right",
                           fillcolor="skyblue", opacity=0.2)
+            # ---Mean---
+            fig.add_hline(y=promedio, line_width=2, line_dash="dash", line_color="gray",
+                          annotation_text=f"Promedio: {promedio}", annotation_font_size=18)
+
     else:
 
         fig.update_layout(
