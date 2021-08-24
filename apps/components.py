@@ -2,7 +2,24 @@ import dash_core_components as dcc
 import dash_html_components as html
 import dash_table
 
+from app import app
 from pandas import to_datetime
+
+watermark = html.Img(
+    # src='https://dimar.maps.arcgis.com/sharing/rest/content/items/089ddf4fa694427cbe1e66cb79ee391f/data',
+    src=app.get_asset_url("watermark.png"),
+    alt='watermark',
+    style={
+        'position': 'absolute',
+        'height': 'auto',
+        'width': 'auto',
+        'max-height': '80vh',
+        'place-self': 'center',
+        'vertical-align': 'middle',
+        'opacity': '0.1',
+        'pointer-events': 'none',
+    }
+)
 
 
 def create_datepicker(min_date, max_date):

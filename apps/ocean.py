@@ -135,16 +135,16 @@ def update_graph(tipo, start_date, end_date, slider_values, pathname):
         tabla.style_data_conditional = styles
         tabla.columns = [{"name": misc.get_col_title(i), "id": i} for i in data.columns]
         tabla.data = data.round(2).to_dict('records')
-        return [tabla], f"{slider_values}m"  # , dl_section]
+        return [tabla, components.watermark], f"{slider_values}m"  # , dl_section]
 
     else:
         try:
             fig, data = graphs.figure(data, section, pathname, tipo)
             graph.figure = fig
-            return [graph], f"{slider_values}m"
+            return [graph, components.watermark], f"{slider_values}m"
 
         except:
-            return html.Div("Error 404"), f"{slider_values}m"
+            return [html.Div("Error 404"), components.watermark], f"{slider_values}m"
 
 
 @app.callback(

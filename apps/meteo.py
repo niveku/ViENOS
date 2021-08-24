@@ -117,15 +117,15 @@ def update_graph(tipo, start_date, end_date, pathname):
         tabla.style_data_conditional = styles
         tabla.columns = [{"name": misc.get_col_title(i), "id": i} for i in data.columns]
         tabla.data = data.round(2).to_dict('records')
-        return [tabla]  # , dl_section]
+        return [tabla, components.watermark]  # , dl_section]
 
     else:
         try:
             fig, data = graphs.figure(data, section, pathname, tipo)
             graph.figure = fig
-            return [graph]
+            return [graph, components.watermark]
         except:
-            return html.Div("Error 404")
+            return [html.Div("Error 404"), components.watermark]
 
 
 @app.callback(

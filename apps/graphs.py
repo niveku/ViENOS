@@ -86,7 +86,6 @@ def figure(df, section, pathname, tipo):
         fig.update_layout(
             autosize=True,
             margin=dict(l=5, r=5, b=20, t=15),
-            # paper_bgcolor="LightBlue",
         )
 
     return fig, df
