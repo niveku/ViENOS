@@ -149,7 +149,7 @@ def create_options_downloads():
     return download_options
 
 
-def create_download_section(dl_options, parent):
+def create_download_section(dl_options):
     dl_section = html.Div(
         id='Div_Descarga',
         style={
@@ -162,7 +162,6 @@ def create_download_section(dl_options, parent):
         children=[
             dl_options,
             html.Button("Descargar", id="boton_descarga"),
-            dcc.Download(id="download_"+parent)
         ]
     )
     return dl_section

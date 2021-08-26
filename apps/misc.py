@@ -27,9 +27,9 @@ def get_col_title(key):
 
 def column_is_valid(section, column):
     valid_colums = []
-    if section == 'Meteo':
+    if section == 'meteo':
         valid_colums = ["Temp", 'Prcp', 'Wvel', 'Wdir']
-    elif section == 'Ocean':
+    elif section == 'ocean':
         valid_colums = ['SST', 'SS', 'Depth']
 
     if column in valid_colums:
@@ -74,7 +74,7 @@ def data_tipo(df, tipo, mask):
     # elif tipo == 'Quincenal':
     #     df2 = df[mask].groupby(df.Time.dt.strftime('%Y:%d')).mean().round(2).reset_index()
     elif tipo == 'Trimestral':
-        df2 = df[mask].groupby(pd.PeriodIndex(df.Time, freq='Q')).mean().round(2).reset_index()
+        df2 = df[mask].groupby(df.Time.dt.to_period('Q')).mean().round(2).reset_index()
         df2.Time = df2.Time.astype(str).str.replace('Q', ':T')
     elif tipo == 'Mensual':
         df2 = df[mask].groupby(df.Time.dt.strftime('%m/%Y')).mean().round(2).reset_index()

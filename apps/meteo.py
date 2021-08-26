@@ -1,5 +1,3 @@
-# import pandas as pd
-
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
@@ -10,7 +8,6 @@ from apps import misc, graphs, components
 # ----------DATA------------------------
 
 df = misc.carga_df('Meteo_h.csv')
-data = df.copy()
 
 # --------- COMPONENTS -----------------
 
@@ -19,67 +16,34 @@ time_options = components.create_time_options(['Horaria', 'Diaria', 'Semanal', '
 graph = components.create_graph()
 tabla = components.create_table(df)
 dl_options = components.create_options_downloads()
-dl_section = components.create_download_section(dl_options, 'meteo')
+dl_section = components.create_download_section(dl_options)
 
 # --------- LAYOUT -----------------
 
 layout = html.Div(
     id='App_Meteo',
-    style={
-        'box-sizing': 'border-box',
-        'height': 'calc(100vh - 20px)',
-        'display': 'flex',
-        'flex-direction': 'column',
-    },
+    className='App_container',
     children=[
         html.Div(
             id='Main_Meteo',
+            className='Main_container',
             children=[],
-            style={
-                'box-sizing': 'border-box',
-                'display': 'flex',
-                'flex-direction': 'column',
-                'flex-shrink': '1',
-                'flex-basis': '100%',
-                'margin-right': '10px',
-                'margin-top': '10px',
-                'margin-bottom': '4px',
-            },
         ),
         html.Div(
             id='opciones_meteo',
-            style={
-                'box-sizing': 'border-box',
-                'display': 'flex',
-                'justify-content': 'space-evenly',
-                'align-items': 'center',
-                'flex-wrap': 'wrap',
-                'padding': '2px',
-                'border': '1px solid black',
-                'background': 'rgb(243,146,56)',
-            },
+            className='Options_container',
             children=[
                 html.Div(
-                    style={
-                        'display': 'inline-flex',
-                        'align-items': 'center',
-                    },
+                    className='SubOptions_container',
                     children=[
-                        html.P('Rango De Fechas:    ', style={
-                            'margin-bottom': '0.1rem',
-                            'font-weight': 'bold', }),
+                        html.P('Rango De Fechas:    ', className='p_title'),
                         datepicker,
                     ]
                 ),
                 html.Div(
-                    style={
-                        'display': 'inline-flex',
-                        'align-items': 'center',
-                    },
+                    className='SubOptions_container',
                     children=[
-                        html.P('Agrupación temporal:', style={
-                            'margin-bottom': '0.1rem',
-                            'font-weight': 'bold', }),
+                        html.P('Agrupación temporal:', className='p_title'),
                         time_options,
                     ]
                 ),
@@ -100,9 +64,11 @@ layout = html.Div(
 )
 def update_graph(tipo, start_date, end_date, pathname):
 
-    global data
-    pathname = pathname.strip().replace('/meteo/', '').lower()
-    section = 'Meteo'
+    pathname = list(filter(None, pathname.strip().lower().split('/')))
+    section = pathname[0]
+    variable = ''
+    if len(pathname) > 1:
+        variable = pathname[1]
 
     # --------Date Filter/Group---------
 
@@ -111,7 +77,7 @@ def update_graph(tipo, start_date, end_date, pathname):
 
     # ------- FIGURE/TABLE
 
-    if pathname == 'table':
+    if variable == 'table':
         cols = ['Temp', 'Prcp', 'Wvel']
         (styles, legend) = misc.discrete_background_color_bins(data[cols])  # Table Style
         tabla.style_data_conditional = styles
@@ -121,36 +87,24 @@ def update_graph(tipo, start_date, end_date, pathname):
 
     else:
         try:
-            fig, data = graphs.figure(data, section, pathname, tipo)
+            fig, data = graphs.figure(data, section, variable, tipo)
             graph.figure = fig
             return [graph, components.watermark]
         except:
             return [html.Div("Error 404"), components.watermark]
 
 
-@app.callback(
-    Output("download_meteo", "data"),
-    Input("boton_descarga", "n_clicks"),
-    State("formato_descarga", "value"),
-    prevent_initial_call=True,
-)
-def descarga(n_clicks, formato_descarga):  # Download trigger
-    file_name = 'ENOS_Meteo'
-    if n_clicks and formato_descarga == 'excel':
-        return dcc.send_data_frame(data.to_excel, file_name+'.xlsx', index=False, sheet_name=file_name)
-    elif n_clicks and formato_descarga == 'csv':
-        return dcc.send_data_frame(data.to_csv, file_name+'.csv', index=False)
-    elif n_clicks and formato_descarga == 'json':
-        return dcc.send_data_frame(data.to_json, file_name+'.json')
-
-
-# app.clientside_callback(
-#     """
-#     function() {
-#         var h = document.getELementByID('table').clientHeight / 20
-#         return (parseInt(h, 10);
-#     }
-#     """,
-#     Output('table', 'style_table'),
-#     Input('url', 'href')
+# @app.callback(
+#     Output("download_meteo", "data"),
+#     Input("boton_descarga", "n_clicks"),
+#     State("formato_descarga", "value"),
+#     prevent_initial_call=True,
 # )
+# def descarga(n_clicks, formato_descarga):  # Download trigger
+#     file_name = 'ENOS_Meteo'
+#     if n_clicks and formato_descarga == 'excel':
+#         return dcc.send_data_frame(data.to_excel, file_name+'.xlsx', index=False, sheet_name=file_name)
+#     elif n_clicks and formato_descarga == 'csv':
+#         return dcc.send_data_frame(data.to_csv, file_name+'.csv', index=False)
+#     elif n_clicks and formato_descarga == 'json':
+#         return dcc.send_data_frame(data.to_json, file_name+'.json')

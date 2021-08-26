@@ -12,15 +12,10 @@ app.layout = html.Div(
     id='ENOS_APP',
     children=[
         dcc.Location(id='url', refresh=False),
+        dcc.Download(id="download_data"),
         html.Div(
             id='page-content',
             children=[],
-            style={
-                'height': '100%',
-                # 'width': '100vw',
-                'box-sizing': 'border-box',
-                'border': '1px solid black',
-            },
         ),
     ],
 )
