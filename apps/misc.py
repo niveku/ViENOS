@@ -21,6 +21,18 @@ dict_cols = {
 # ----------DATA MANAGEMENT-------------------------------
 
 
+def path_extract(pathname):
+    pathname = list(filter(None, pathname.strip().lower().split('/')))
+    section = ''
+    variable = ''
+    if len(pathname) > 0:
+        section = pathname[0]
+    if len(pathname) > 1:
+        variable = pathname[1]
+
+    return section, variable
+
+
 def get_col_title(key):
     return dict_cols[key]
 

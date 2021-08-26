@@ -7,11 +7,15 @@ from apps import windrose, misc
 
 def figure(df, section, pathname, tipo):
 
+    mode = 'lines+markers'
+    point_size = 4
     # ------Variable Format--------
 
     variable = pathname.capitalize()   # Controls the column to show
     if variable in ["Sst", "Ss"]:
         variable = variable.upper()
+        mode = 'markers'
+        point_size = 10
 
     # ------Graph Generation--------
 
@@ -19,12 +23,12 @@ def figure(df, section, pathname, tipo):
 
     if variable == 'Wdir':
         df2 = windrose.rose_df(df, mode=0)
-        fig = px.bar_polar(df2, r="frequency", theta="direction", color="speed",
+        fig = px.bar_polar(df2, r="frecuencia", theta="direccion", color="velocidad",
                            color_discrete_sequence=misc.color_pallete(5))  # px.colors.diverging.Spectral_r)
     elif misc.column_is_valid(section, variable):
         y_title = misc.get_col_title(variable)
-        fig = go.Figure(data=go.Scatter(x=df.Time, y=df[variable], mode='lines+markers', line=line, marker_size=3))
-        fig.update_yaxes(title_text=y_title, zeroline=True, showline=True)
+        fig = go.Figure(data=go.Scatter(x=df.Time, y=df[variable], mode=mode, line=line, marker_size=point_size))
+        # fig.update_yaxes(title_text=y_title, zeroline=True, showline=True)
 
     else:
         raise Exception('The pathname is not valid.')
@@ -85,7 +89,14 @@ def figure(df, section, pathname, tipo):
 
         fig.update_layout(
             autosize=True,
-            margin=dict(l=5, r=5, b=20, t=15),
+            margin=dict(l=5, r=5, b=0, t=25),
+            legend=dict(
+                orientation="h",
+                yanchor="bottom",
+                x=.5,
+                y=-.12,
+                xanchor="center"
+            ),
         )
 
     return fig, df

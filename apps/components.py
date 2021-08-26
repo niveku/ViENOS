@@ -20,7 +20,20 @@ watermark = html.Img(
         'pointer-events': 'none',
     }
 )
-
+cecoldo = html.A(
+    href='https://cecoldo.dimar.mil.co/web/',
+    children=[
+        html.Img(
+            src=app.get_asset_url("cecoldo_logo.png"),
+            alt='cecoldo',
+            style={
+                'height': '40px',
+                'width': 'auto',
+                'vertical-align': 'middle',
+            }
+        )
+    ]
+)
 
 def create_datepicker(min_date, max_date):
 

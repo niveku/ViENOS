@@ -193,8 +193,7 @@ p {
     flex-direction: column;
     flex-shrink: 1;
     flex-basis: 100%;
-    margin-right: 10px;
-    margin-top: 10px;
+    margin-left: 10px;
     margin-bottom: 4px;
 }
 
@@ -204,7 +203,6 @@ p {
     justify-content: space-evenly;
     align-items: center;
     flex-wrap: wrap;
-    padding: 2px;
     border: 1px solid black;
     background: rgb(243, 146, 56);
 }
@@ -393,6 +391,8 @@ li {
     margin-left: 10px;
     background-color: inherit;
     border: none;
+    margin-top: 2px;
+    margin-bottom: 2px;
 }
 
 .DateInput {

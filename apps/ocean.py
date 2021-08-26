@@ -1,6 +1,5 @@
-import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import Input, Output, State
+from dash.dependencies import Input, Output
 
 from app import app
 from apps import misc, graphs, components
@@ -37,7 +36,7 @@ layout = html.Div(
                 html.Div(
                     className='SubOptions_container',
                     children=[
-                        html.P('Rango De Fechas:    ', className='p_title'),
+                        html.P('Periodo:    ', className='p_title'),
                         datepicker,
                     ]
                 ),
@@ -76,11 +75,7 @@ layout = html.Div(
 )
 def update_graph(tipo, start_date, end_date, slider_values, pathname):
 
-    pathname = list(filter(None, pathname.strip().lower().split('/')))
-    section = pathname[0]
-    variable = ''
-    if len(pathname) > 1:
-        variable = pathname[1]
+    section, variable = misc.path_extract(pathname)
 
     # --------Date Filter/Group---------
 
