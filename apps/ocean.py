@@ -55,7 +55,7 @@ layout = html.Div(
                         html.Div(id='output-range-slider')
                     ]
                 ),
-
+                components.cecoldo,
             ]
         ),
     ]

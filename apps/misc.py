@@ -7,13 +7,13 @@ from numpy import nan
 
 dict_cols = {
     'Time': 'Fecha/Hora',
-    'Temp': 'Temperatura(C°)',
-    'Prcp': 'Precipitación(mL)',
-    'Wvel': 'Velocidad del viento(m/s)',
-    'Wdir': 'Dirección del viento(°)',
-    'SST': 'Temp. del Mar(C°)',
-    'SS': 'Salinidad',
-    'Depth': 'Profundidad(m)',
+    'Temp': 'Temperatura (°C)',
+    'Prcp': 'Precipitación (mL)',
+    'Wvel': 'Velocidad del viento (m/s)',
+    'Wdir': 'Dirección del viento (°)',
+    'SST': 'Temp. del Mar (°C)',
+    'SS': 'Salinidad (g/L)',
+    'Depth': 'Profundidad (m)',
     'Long': 'Longitud',
     'Lat': 'Latitud',
 }

@@ -43,7 +43,7 @@ def display_page(pathname):
             html.Br(),
             dcc.Link('- Tabla de Datos', href='/meteo/table', className='sub_menu'),
             html.Br(),
-            dcc.Link('- Pronóstico meorología', href='/frcst_meteo', className='sub_menu'),
+            dcc.Link('- Pronóstico Meteorología', href='/frcst_meteo', className='sub_menu'),
             html.Br(),
             html.Br(),
             html.H6('Oceanografía', className='main_menu'),

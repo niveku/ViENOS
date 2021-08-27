@@ -171,6 +171,13 @@ p {
     text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }
 
+.dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner table {
+    font-family: Arial !important;
+}
+
+.dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner table {
+    font-family: Arial !important;
+}
 /* Containers
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 
@@ -193,7 +200,6 @@ p {
     flex-direction: column;
     flex-shrink: 1;
     flex-basis: 100%;
-    margin-left: 10px;
     margin-bottom: 4px;
 }
 

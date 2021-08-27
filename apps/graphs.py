@@ -8,7 +8,7 @@ from apps import windrose, misc
 def figure(df, section, pathname, tipo):
 
     mode = 'lines+markers'
-    point_size = 4
+    point_size = 5
     # ------Variable Format--------
 
     variable = pathname.capitalize()   # Controls the column to show
@@ -28,7 +28,7 @@ def figure(df, section, pathname, tipo):
     elif misc.column_is_valid(section, variable):
         y_title = misc.get_col_title(variable)
         fig = go.Figure(data=go.Scatter(x=df.Time, y=df[variable], mode=mode, line=line, marker_size=point_size))
-        # fig.update_yaxes(title_text=y_title, zeroline=True, showline=True)
+        fig.update_yaxes(title_text=y_title)  # , zeroline=True, showline=True)
 
     else:
         raise Exception('The pathname is not valid.')
