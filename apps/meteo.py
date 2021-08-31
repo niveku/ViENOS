@@ -1,5 +1,5 @@
 import dash_html_components as html
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 
 from app import app
 from apps import misc, graphs, components
@@ -60,11 +60,9 @@ layout = html.Div(
     [Input("tipo", "value"),
      Input("Date_Picker", "start_date"),
      Input("Date_Picker", "end_date"),
-     Input('url', 'pathname')]
+     State('url', 'pathname')]
 )
 def update_graph(tipo, start_date, end_date, pathname):
-
-    section, variable = misc.path_extract(pathname)
 
     # --------Date Filter/Group---------
 

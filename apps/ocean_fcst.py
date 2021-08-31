@@ -6,12 +6,12 @@ from apps import misc, graphs, components
 
 # ----------DATA------------------------
 
-df = misc.carga_df('Ocean_q.csv')
+df = misc.carga_df('Fcst_Ocean_d.csv')
 
 # --------- COMPONENTS -----------------
 
 datepicker = components.create_datepicker(df.Time.min(), df.Time.max())
-time_options = components.create_time_options(['Quincenal', 'Mensual', 'Trimestral'])
+time_options = components.create_time_options(['Diario', 'Quincenal', 'Mensual', 'Trimestral'])
 range_slider = components.create_range_slider(df.Depth, 'depth_slider')
 graph = components.create_graph()
 tabla = components.create_table(df)
@@ -19,16 +19,16 @@ dl_options = components.create_options_downloads()
 dl_section = components.create_download_section(dl_options)
 
 layout = html.Div(
-    id='App_ocean',
+    id='App_ocean_fcst',
     className='App_container',
     children=[
         html.Div(
-            id='Main_ocean',
+            id='Main_ocean_fcst',
             className='Main_container',
             children=[],
         ),
         html.Div(
-            id='opciones_ocean',
+            id='opciones_ocean_fcst',
             className='Options_container',
             children=[
                 html.Div(
@@ -50,7 +50,7 @@ layout = html.Div(
                     children=[
                         html.P('Profundidad:', className='p_title'),
                         range_slider,
-                        html.Div(id='output-range-slider')
+                        html.Div(id='output-range-slider-fcst')
                     ]
                 ),
                 components.cecoldo,
@@ -63,8 +63,8 @@ layout = html.Div(
 
 
 @app.callback(
-    Output("Main_ocean", "children"),
-    Output('output-range-slider', 'children'),
+    Output("Main_ocean_fcst", "children"),
+    Output('output-range-slider-fcst', 'children'),
     [Input("tipo", "value"),
      Input("Date_Picker", "start_date"),
      Input("Date_Picker", "end_date"),
@@ -85,7 +85,7 @@ def update_graph(tipo, start_date, end_date, slider_values, pathname):
     # ------- FIGURE/TABLE
 
     if variable == 'table':
-        cols = ["SST", "SS", "Depth"]
+        cols = ["SST", "SS", "SSH", "Depth"]
         (styles, legend) = misc.discrete_background_color_bins(data[cols])  # Table Style
         tabla.style_data_conditional = styles
         tabla.columns = [{"name": misc.get_col_title(i), "id": i} for i in data.columns]

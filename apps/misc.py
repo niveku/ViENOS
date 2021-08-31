@@ -12,6 +12,7 @@ dict_cols = {
     'Wvel': 'Velocidad del viento (m/s)',
     'Wdir': 'Dirección del viento (°)',
     'SST': 'Temp. del Mar (°C)',
+    'SSH': 'Nivel del Mar (m)',
     'SS': 'Salinidad (g/L)',
     'Depth': 'Profundidad (m)',
     'Long': 'Longitud',
@@ -41,8 +42,12 @@ def column_is_valid(section, column):
     valid_colums = []
     if section == 'meteo':
         valid_colums = ["Temp", 'Prcp', 'Wvel', 'Wdir']
+    if section == 'meteo_fcst':
+        valid_colums = ["Temp", 'Wvel', 'Wdir']
     elif section == 'ocean':
         valid_colums = ['SST', 'SS', 'Depth']
+    elif section == 'ocean_fcst':
+        valid_colums = ['SST', 'SS', 'SSH', 'Depth']
 
     if column in valid_colums:
         return True
@@ -54,8 +59,11 @@ def carga_df(file_name):
     path = pathlib.Path(__file__).parent
     data_path = path.joinpath("../datasets").resolve()
     dataframe = pd.read_csv(data_path.joinpath(file_name))
-    dataframe['Time'] = pd.to_datetime(dataframe['Time'])
     dataframe.replace(-99999, nan, inplace=True)
+    dataframe['Time'] = pd.to_datetime(dataframe['Time'])
+    # dataframe['Long'] = dataframe.Long.astype(float)
+    # dataframe['Lat'] = dataframe.Lat.astype(float)
+
     if 'Depth' in dataframe.columns:
         dataframe['Depth'] = dataframe.Depth.astype(int)
         dataframe.sort_values(["Time", "Depth"], inplace=True)

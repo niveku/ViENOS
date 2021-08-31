@@ -12,7 +12,7 @@ def figure(df, section, pathname, tipo):
     # ------Variable Format--------
 
     variable = pathname.capitalize()   # Controls the column to show
-    if variable in ["Sst", "Ss"]:
+    if variable in ["Sst", "Ss", "Ssh"]:
         variable = variable.upper()
         mode = 'markers'
         point_size = 10
@@ -48,7 +48,7 @@ def figure(df, section, pathname, tipo):
 
         # --------X-Axis Updates -----------
 
-        fig.update_xaxes(range=[df.Time.min(), df.Time.max()])
+        fig.update_xaxes(range=[df[df[variable].notnull()].Time.min(), df[df[variable].notnull()].Time.max()])
         # fig.update_xaxes(rangeslider_visible=True) #SLIDER
 
         if tipo == 'Diaria' or tipo == 'Quincenal':

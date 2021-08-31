@@ -16,12 +16,13 @@ watermark = html.Img(
         'max-height': '80vh',
         'place-self': 'center',
         'vertical-align': 'middle',
-        'opacity': '0.1',
+        'opacity': '0.09',
         'pointer-events': 'none',
     }
 )
 cecoldo = html.A(
     href='https://cecoldo.dimar.mil.co/web/',
+    target="_blank",
     children=[
         html.Img(
             src=app.get_asset_url("cecoldo_logo.png"),
@@ -34,6 +35,7 @@ cecoldo = html.A(
         )
     ]
 )
+
 
 def create_datepicker(min_date, max_date):
 
@@ -120,7 +122,7 @@ def create_table(df):
         fixed_rows={'headers': True},
         virtualization=True,
         page_action='native',
-        # page_size=20,
+        page_size=20,
         sort_action="native",
 
         style_cell={
