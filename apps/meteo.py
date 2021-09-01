@@ -46,7 +46,13 @@ layout = html.Div(
                         time_options,
                     ]
                 ),
-                components.cecoldo,
+                html.Div(
+                    className='SubOptions_container',
+                    children=[
+                        html.P('Fuente de Datos:', className='p_title'),
+                        components.cecoldo,
+                    ]
+                ),
             ]
         ),
     ]
@@ -63,6 +69,8 @@ layout = html.Div(
      State('url', 'pathname')]
 )
 def update_graph(tipo, start_date, end_date, pathname):
+
+    section, variable = misc.path_extract(pathname)
 
     # --------Date Filter/Group---------
 
@@ -84,7 +92,7 @@ def update_graph(tipo, start_date, end_date, pathname):
             fig, data = graphs.figure(data, section, variable, tipo)
             graph.figure = fig
             return [graph, components.watermark]
-        except:
+        except ValueError:
             return [html.Div("Error 404"), components.watermark]
 
 

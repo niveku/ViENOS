@@ -6,32 +6,19 @@ from app import app
 from pandas import to_datetime
 
 watermark = html.Img(
-    # src='https://dimar.maps.arcgis.com/sharing/rest/content/items/089ddf4fa694427cbe1e66cb79ee391f/data',
     src=app.get_asset_url("watermark.png"),
+    className='Watermark',
     alt='watermark',
-    style={
-        'position': 'absolute',
-        'height': 'auto',
-        'width': 'auto',
-        'max-height': '80vh',
-        'place-self': 'center',
-        'vertical-align': 'middle',
-        'opacity': '0.09',
-        'pointer-events': 'none',
-    }
 )
 cecoldo = html.A(
+    className='Cecoldo_A',
     href='https://cecoldo.dimar.mil.co/web/',
     target="_blank",
     children=[
         html.Img(
+            id='Cecoldo_logo',
             src=app.get_asset_url("cecoldo_logo.png"),
             alt='cecoldo',
-            style={
-                'height': '40px',
-                'width': 'auto',
-                'vertical-align': 'middle',
-            }
         )
     ]
 )

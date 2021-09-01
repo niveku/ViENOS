@@ -218,6 +218,46 @@ p {
     align-items: center;
 }
 
+.Watermark{
+    position: absolute;
+    height: auto;
+        width: auto;
+        max-height: 80vh;
+        place-self: center;
+        vertical-align: middle;
+        opacity: 0.09;
+        pointer-events: none;
+}
+
+.Cecoldo_A{
+  height: 42px;
+  width: 101px;
+  box-sizing: border-box;
+  border-radius: 6px;
+  border: 1px solid black;
+  background-color: white;
+  cursor: pointer;
+}
+
+.Cecoldo_A:hover{
+    background-color: #007eff;
+}
+
+#Cecoldo_logo{
+    display: block;
+    box-sizing: border-box;
+    height: 38px;
+    margin-left: auto;
+    margin-right: auto;
+    width: auto;
+    border-radius: 6px;
+    vertical-align: middle;
+}
+
+#Cecoldo_logo:hover{
+    height: 40px;
+}
+
 /* Blockquotes
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 

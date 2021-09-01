@@ -11,7 +11,7 @@ df = misc.carga_df('Fcst_Ocean_d.csv')
 # --------- COMPONENTS -----------------
 
 datepicker = components.create_datepicker(df.Time.min(), df.Time.max())
-time_options = components.create_time_options(['Diario', 'Quincenal', 'Mensual', 'Trimestral'])
+time_options = components.create_time_options(['Diaria', 'Mensual', 'Trimestral'])
 range_slider = components.create_range_slider(df.Depth, 'depth_slider')
 graph = components.create_graph()
 tabla = components.create_table(df)
@@ -53,7 +53,13 @@ layout = html.Div(
                         html.Div(id='output-range-slider-fcst')
                     ]
                 ),
-                components.cecoldo,
+                html.Div(
+                    className='SubOptions_container',
+                    children=[
+                        html.P('Fuente de Datos:', className='p_title'),
+                        components.cecoldo,
+                    ]
+                ),
             ]
         ),
     ]
@@ -98,7 +104,7 @@ def update_graph(tipo, start_date, end_date, slider_values, pathname):
             graph.figure = fig
             return [graph, components.watermark], f"{slider_values}m"
 
-        except:
+        except ValueError:
             return [html.Div("Error 404"), components.watermark], f"{slider_values}m"
 
 

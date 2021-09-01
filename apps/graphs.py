@@ -14,8 +14,8 @@ def figure(df, section, pathname, tipo):
     variable = pathname.capitalize()   # Controls the column to show
     if variable in ["Sst", "Ss", "Ssh"]:
         variable = variable.upper()
-        mode = 'markers'
-        point_size = 10
+        # mode = 'markers'
+        # point_size = 10
 
     # ------Graph Generation--------
 
@@ -31,7 +31,7 @@ def figure(df, section, pathname, tipo):
         fig.update_yaxes(title_text=y_title)  # , zeroline=True, showline=True)
 
     else:
-        raise Exception('The pathname is not valid.')
+        raise ValueError('404. The pathname is not valid')
 
     if variable != 'Wdir':
 

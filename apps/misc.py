@@ -12,7 +12,7 @@ dict_cols = {
     'Wvel': 'Velocidad del viento (m/s)',
     'Wdir': 'Dirección del viento (°)',
     'SST': 'Temp. del Mar (°C)',
-    'SSH': 'Nivel del Mar (m)',
+    'SSH': 'Nivel del Mar (cm)',
     'SS': 'Salinidad (g/L)',
     'Depth': 'Profundidad (m)',
     'Long': 'Longitud',
@@ -63,6 +63,8 @@ def carga_df(file_name):
     dataframe['Time'] = pd.to_datetime(dataframe['Time'])
     # dataframe['Long'] = dataframe.Long.astype(float)
     # dataframe['Lat'] = dataframe.Lat.astype(float)
+    if 'SSH' in dataframe.columns:
+        dataframe['SSH'] = dataframe.SSH*100
 
     if 'Depth' in dataframe.columns:
         dataframe['Depth'] = dataframe.Depth.astype(int)
