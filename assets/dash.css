@@ -189,7 +189,7 @@ p {
 
 .App_container{
     box-sizing: border-box;
-    height: calc(100vh - 35px);
+    height: calc(99vh - 15px);
     display: flex;
     flex-direction: column;
 }
@@ -485,7 +485,7 @@ td.CalendarDay {
 .dash-table-container{
     position: relative;
     display: flex;
-    max-height: calc(90vh - 40px) !important;
+    max-height: calc(90vh - 10px) !important;
     flex-direction: column;
     flex-shrink: 1;
     flex-basis: 100%;

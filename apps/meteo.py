@@ -6,7 +6,7 @@ from apps import misc, graphs, components
 
 # ----------DATA------------------------
 
-df = misc.carga_df('Meteo_h.csv')
+df = misc.get_data('TUMACO_METEO_H')
 
 # --------- COMPONENTS -----------------
 

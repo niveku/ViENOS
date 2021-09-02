@@ -2,3 +2,5 @@ venv
 *.pyc
 .env
 .DS_Store
+.idea
+settings.py

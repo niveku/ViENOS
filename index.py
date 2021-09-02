@@ -6,7 +6,7 @@ from dash.dependencies import Input, Output
 from app import app
 from app import server
 # Connecion to apps files
-from apps import meteo, meteo_fcst, ocean, ocean_fcst
+from apps import meteo, meteo_fcst, ocean, ocean_fcst, estacion5
 
 app.layout = html.Div(
     id='ENOS_APP',
@@ -33,6 +33,8 @@ def display_page(pathname):
         return ocean.layout
     elif pathname.startswith('/ocean_fcst/'):
         return ocean_fcst.layout
+    elif pathname.startswith('/estacion5/'):
+        return estacion5.layout
     else:
         return ([
             html.H6('Meteorología', className='main_menu'),
@@ -49,6 +51,8 @@ def display_page(pathname):
             html.H6('Pronósticos Meteorología', className='main_menu'),
             dcc.Link('- Temperatura', href='/meteo_fcst/temp', className='sub_menu'),
             html.Br(),
+            dcc.Link('- Precipitación', href='/meteo_fcst/prcp', className='sub_menu'),
+            html.Br(),
             dcc.Link('- Velocidad Del Viento', href='/meteo_fcst/wvel', className='sub_menu'),
             html.Br(),
             dcc.Link('- Rosa de Vientos', href='/meteo_fcst/wdir', className='sub_menu'),
@@ -58,6 +62,8 @@ def display_page(pathname):
             html.H6('Oceanografía', className='main_menu'),
             dcc.Link('- Temperatura del Mar', href='/ocean/sst', className='sub_menu'),
             html.Br(),
+            dcc.Link('- Nivel del Mar', href='/ocean/ssh', className='sub_menu'),
+            html.Br(),
             dcc.Link('- Salinidad', href='/ocean/ss', className='sub_menu'),
             html.Br(),
             dcc.Link('- Tabla de Datos', href='/ocean/table', className='sub_menu'),
@@ -65,11 +71,18 @@ def display_page(pathname):
             html.H6('Pronósticos Oceanografía', className='main_menu'),
             dcc.Link('- Temperatura del Mar', href='/ocean_fcst/sst', className='sub_menu'),
             html.Br(),
-            dcc.Link('- Salinidad', href='/ocean_fcst/ss', className='sub_menu'),
-            html.Br(),
             dcc.Link('- Nivel del Mar', href='/ocean_fcst/ssh', className='sub_menu'),
             html.Br(),
+            dcc.Link('- Salinidad', href='/ocean_fcst/ss', className='sub_menu'),
+            html.Br(),
             dcc.Link('- Tabla de Datos', href='/ocean_fcst/table', className='sub_menu'),
+            html.Br(),
+            html.H6('Estación 5', className='main_menu'),
+            dcc.Link('- Temperatura del Mar', href='/estacion5/sst', className='sub_menu'),
+            html.Br(),
+            dcc.Link('- Salinidad', href='/estacion5/ss', className='sub_menu'),
+            html.Br(),
+            dcc.Link('- Tabla de Datos', href='/estacion5/table', className='sub_menu'),
             html.Br(),
             html.Br(),
         ])

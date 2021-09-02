@@ -109,7 +109,7 @@ def create_table(df):
         fixed_rows={'headers': True},
         virtualization=True,
         page_action='native',
-        page_size=20,
+        page_size=24,
         sort_action="native",
 
         style_cell={

@@ -1,10 +1,12 @@
 import dash_html_components as html
 import colorlover
 import pathlib
+#import pyodbc
 import pandas as pd
-from numpy import nan
-# import mysql.connector as connector
+from numpy import nan, rad2deg
 
+path = pathlib.Path(__file__).parent
+data_path = path.joinpath("../datasets").resolve()
 dict_cols = {
     'Time': 'Fecha/Hora',
     'Temp': 'Temperatura (°C)',
@@ -40,14 +42,12 @@ def get_col_title(key):
 
 def column_is_valid(section, column):
     valid_colums = []
-    if section == 'meteo':
+    if section == 'meteo' or section == 'meteo_fcst':
         valid_colums = ["Temp", 'Prcp', 'Wvel', 'Wdir']
-    if section == 'meteo_fcst':
-        valid_colums = ["Temp", 'Wvel', 'Wdir']
-    elif section == 'ocean':
-        valid_colums = ['SST', 'SS', 'Depth']
-    elif section == 'ocean_fcst':
-        valid_colums = ['SST', 'SS', 'SSH', 'Depth']
+    elif section == 'ocean' or section == 'ocean_fcst':
+        valid_colums = ['SST', 'SS', 'SSH']
+    elif section == 'estacion5':
+        valid_colums = ['SST', 'SS']
 
     if column in valid_colums:
         return True
@@ -55,22 +55,66 @@ def column_is_valid(section, column):
         return False
 
 
-def carga_df(file_name):
-    path = pathlib.Path(__file__).parent
-    data_path = path.joinpath("../datasets").resolve()
+def df_from_local(file_name):
+
     dataframe = pd.read_csv(data_path.joinpath(file_name))
+    return dataframe
+
+
+def df_from_db(table):
+    """
+    table valid inputs: TUMACO_METEO_H, TUMACO_METEO_FCST_H, TUMACO_OCEAN_D, TUMACO_OCEAN_FCST_D, ESTACION5_OCEAN_Q
+    """
+
+    try:
+        import settings
+
+        server = "BTASQLCLUSIG\SIGDIMAR"
+        database = 'SIGDIMAR'
+        username = settings.username
+        password = settings.password
+
+        cnxn = pyodbc.connect('DRIVER={SQL Server};SERVER=' + server + ';DATABASE=' +
+                              database + ';UID=' + username + ';PWD=' + password)
+
+        dataframe = pd.read_sql_query('SELECT * FROM [Esquema_Vienos].[' + table + ']', cnxn)  # .round(2)
+        dataframe.drop('OBJECTID', axis=1, inplace=True)
+        return dataframe
+
+    except:
+        raise
+
+
+def get_data(table):
+
+    try:
+        dataframe = df_from_db(table)
+        print('Online')
+        dataframe.to_csv(table + '.csv', index=False, )
+    except:
+        try:
+            dataframe = df_from_local(table + '.csv')
+            print(table, ' : Local')
+        except:
+            raise ValueError("No data source found")
+
     dataframe.replace(-99999, nan, inplace=True)
-    dataframe['Time'] = pd.to_datetime(dataframe['Time'])
-    # dataframe['Long'] = dataframe.Long.astype(float)
-    # dataframe['Lat'] = dataframe.Lat.astype(float)
+
+    if 'Wdir' in dataframe.columns:
+        dataframe['Wdir'] = rad2deg(dataframe.Wdir) % 360
+
+    if 'Time' in dataframe.columns:
+        dataframe['Time'] = pd.to_datetime(dataframe['Time'])
+
     if 'SSH' in dataframe.columns:
-        dataframe['SSH'] = dataframe.SSH*100
+        dataframe['SSH'] = dataframe.SSH * 100
 
     if 'Depth' in dataframe.columns:
         dataframe['Depth'] = dataframe.Depth.astype(int)
         dataframe.sort_values(["Time", "Depth"], inplace=True)
     else:
         dataframe.sort_values("Time", inplace=True)
+
     return dataframe
 
 
@@ -163,16 +207,3 @@ def discrete_background_color_bins(df, n_bins=5):
         )
 
     return styles, html.Div(legend, style={'padding': '5px 0 5px 0'})
-
-# def conexion():
-#     conexion = None
-#     try:
-#         #SQL server
-#         conexion = connector.connect(
-#         host='BTASQLCLUSIG\SIGDIMAR',
-#         user='Esquema_Vienos',
-#         password='*VIENOSC2021*')
-#         print('Conexión Exitosa')
-#     except:
-#         print ('Error')
-#     return conexion
