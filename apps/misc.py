@@ -123,6 +123,7 @@ def df_from_local(file_name):
 
 def get_data(table):
 
+    dataframe = pd.DataFrame()
     # try:
     #     dataframe = df_from_db(table)
     #     dataframe.to_csv(table + '.csv', index=False)
