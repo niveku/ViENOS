@@ -4,7 +4,7 @@ import pathlib
 import pandas as pd
 from numpy import nan, rad2deg
 # from threading import Thread
-import functools
+# import functools
 
 
 # # -------- TIMEOUT FUNCTION ----------------
@@ -133,7 +133,7 @@ def get_data(table):
 
     try:
         dataframe = df_from_local(table + '.csv')
-        print(table, ': Local')
+        # print(table, ': Local')
     except:
         raise ValueError("No data source found")
 
