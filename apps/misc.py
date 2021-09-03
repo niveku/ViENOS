@@ -1,7 +1,6 @@
 import dash_html_components as html
 import colorlover
 import pathlib
-import pyodbc
 import pandas as pd
 from numpy import nan, rad2deg
 from threading import Thread
@@ -102,6 +101,7 @@ def df_from_db(table):
 
     try:
         import settings
+        import pyodbc
 
         server = "BTASQLCLUSIG\SIGDIMAR"
         database = 'SIGDIMAR'
