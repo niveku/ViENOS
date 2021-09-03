@@ -11,7 +11,7 @@ df = misc.get_data('TUMACO_OCEAN_FCST_D')
 # --------- COMPONENTS -----------------
 
 datepicker = components.create_datepicker(df.Time.min(), df.Time.max())
-time_options = components.create_time_options(['Diaria', 'Quincenal', 'Mensual', 'Trimestral'])
+time_options = components.create_time_options(['Diaria', 'Semanal', 'Mensual'])
 graph = components.create_graph()
 tabla = components.create_table(df)
 dl_options = components.create_options_downloads()

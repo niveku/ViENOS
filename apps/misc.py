@@ -1,9 +1,43 @@
 import dash_html_components as html
 import colorlover
 import pathlib
-#import pyodbc
+import pyodbc
 import pandas as pd
 from numpy import nan, rad2deg
+from threading import Thread
+import functools
+
+
+# -------- TIMEOUT FUNCTION ----------------
+def timeout(seconds_before_timeout):
+    """
+    https://stackoverflow.com/a/48980413/16825309
+    """
+    def deco(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            res = [Exception('function [%s] timeout [%s seconds] exceeded!' % (func.__name__, seconds_before_timeout))]
+
+            def newFunc():
+                try:
+                    res[0] = func(*args, **kwargs)
+                except Exception as e:
+                    res[0] = e
+            t = Thread(target=newFunc)
+            t.daemon = True
+            try:
+                t.start()
+                t.join(seconds_before_timeout)
+            except Exception as e:
+                print('error starting thread')
+                raise e
+            ret = res[0]
+            if isinstance(ret, BaseException):
+                raise ret
+            return ret
+        return wrapper
+    return deco
+
 
 path = pathlib.Path(__file__).parent
 data_path = path.joinpath("../datasets").resolve()
@@ -21,9 +55,8 @@ dict_cols = {
     'Lat': 'Latitud',
 }
 
+
 # ----------DATA MANAGEMENT-------------------------------
-
-
 def path_extract(pathname):
     pathname = list(filter(None, pathname.strip().lower().split('/')))
     section = ''
@@ -61,9 +94,10 @@ def df_from_local(file_name):
     return dataframe
 
 
+@timeout(0.5)
 def df_from_db(table):
     """
-    table valid inputs: TUMACO_METEO_H, TUMACO_METEO_FCST_H, TUMACO_OCEAN_D, TUMACO_OCEAN_FCST_D, ESTACION5_OCEAN_Q
+    :arg table: Valid inputs TUMACO_METEO_H, TUMACO_METEO_FCST_H, TUMACO_OCEAN_D, TUMACO_OCEAN_FCST_D, ESTACION5_OCEAN_Q
     """
 
     try:
@@ -89,12 +123,14 @@ def get_data(table):
 
     try:
         dataframe = df_from_db(table)
-        print('Online')
-        dataframe.to_csv(table + '.csv', index=False, )
+        dataframe.to_csv(table + '.csv', index=False)
+        print(table, ': Online')
+
     except:
+
         try:
             dataframe = df_from_local(table + '.csv')
-            print(table, ' : Local')
+            print(table, ': Local')
         except:
             raise ValueError("No data source found")
 
@@ -102,6 +138,9 @@ def get_data(table):
 
     if 'Wdir' in dataframe.columns:
         dataframe['Wdir'] = rad2deg(dataframe.Wdir) % 360
+
+    if 'Prcp' in dataframe.columns:
+        dataframe['Prcp'] = dataframe.Prcp * 1000
 
     if 'Time' in dataframe.columns:
         dataframe['Time'] = pd.to_datetime(dataframe['Time'])
@@ -137,8 +176,6 @@ def data_tipo(df, tipo, mask):
         # data['Fecha'] = data.Time.dt.strftime('%d de %B del %Y')
     elif tipo == 'Semanal':
         df2 = df[mask].groupby(df.Time.dt.strftime('%Y:S%w')).mean().round(2).reset_index()
-    # elif tipo == 'Quincenal':
-    #     df2 = df[mask].groupby(df.Time.dt.strftime('%Y:%d')).mean().round(2).reset_index()
     elif tipo == 'Trimestral':
         df2 = df[mask].groupby(df.Time.dt.to_period('Q')).mean().round(2).reset_index()
         df2.Time = df2.Time.astype(str).str.replace('Q', ':T')
