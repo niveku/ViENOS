@@ -3,40 +3,41 @@ import colorlover
 import pathlib
 import pandas as pd
 from numpy import nan, rad2deg
-from threading import Thread
+# from threading import Thread
 import functools
 
 
-# -------- TIMEOUT FUNCTION ----------------
-def timeout(seconds_before_timeout):
-    """
-    https://stackoverflow.com/a/48980413/16825309
-    """
-    def deco(func):
-        @functools.wraps(func)
-        def wrapper(*args, **kwargs):
-            res = [Exception('function [%s] timeout [%s seconds] exceeded!' % (func.__name__, seconds_before_timeout))]
-
-            def newFunc():
-                try:
-                    res[0] = func(*args, **kwargs)
-                except Exception as e:
-                    res[0] = e
-            t = Thread(target=newFunc)
-            t.daemon = True
-            try:
-                t.start()
-                t.join(seconds_before_timeout)
-            except Exception as e:
-                print('error starting thread')
-                raise e
-            ret = res[0]
-            if isinstance(ret, BaseException):
-                raise ret
-            return ret
-        return wrapper
-    return deco
-
+# # -------- TIMEOUT FUNCTION ----------------
+# def timeout(seconds_before_timeout):
+#     """
+#     https://stackoverflow.com/a/48980413/16825309
+#     """
+#     def deco(func):
+#         @functools.wraps(func)
+#         def wrapper(*args, **kwargs):
+#             res = [Exception('function [%s]
+#             timeout [%s seconds] exceeded!' % (func.__name__, seconds_before_timeout))]
+#
+#             def newFunc():
+#                 try:
+#                     res[0] = func(*args, **kwargs)
+#                 except Exception as e:
+#                     res[0] = e
+#             t = Thread(target=newFunc)
+#             t.daemon = True
+#             try:
+#                 t.start()
+#                 t.join(seconds_before_timeout)
+#             except Exception as e:
+#                 print('error starting thread')
+#                 raise e
+#             ret = res[0]
+#             if isinstance(ret, BaseException):
+#                 raise ret
+#             return ret
+#         return wrapper
+#     return deco
+#
 
 path = pathlib.Path(__file__).parent
 data_path = path.joinpath("../datasets").resolve()
@@ -93,46 +94,47 @@ def df_from_local(file_name):
     return dataframe
 
 
-@timeout(0.5)
-def df_from_db(table):
-    """
-    :arg table: Valid inputs TUMACO_METEO_H, TUMACO_METEO_FCST_H, TUMACO_OCEAN_D, TUMACO_OCEAN_FCST_D, ESTACION5_OCEAN_Q
-    """
-
-    try:
-        import settings
-        import pyodbc
-
-        server = "BTASQLCLUSIG\SIGDIMAR"
-        database = 'SIGDIMAR'
-        username = settings.username
-        password = settings.password
-
-        cnxn = pyodbc.connect('DRIVER={SQL Server};SERVER=' + server + ';DATABASE=' +
-                              database + ';UID=' + username + ';PWD=' + password)
-
-        dataframe = pd.read_sql_query('SELECT * FROM [Esquema_Vienos].[' + table + ']', cnxn)  # .round(2)
-        dataframe.drop('OBJECTID', axis=1, inplace=True)
-        return dataframe
-
-    except:
-        raise
+# @timeout(0.5)
+# def df_from_db(table):
+#     """
+#     :arg table: Valid inputs TUMACO_METEO_H, TUMACO_METEO_FCST_H,
+#     TUMACO_OCEAN_D, TUMACO_OCEAN_FCST_D, ESTACION5_OCEAN_Q
+#     """
+#
+#     try:
+#         import settings
+#         import pyodbc
+#
+#         server = "BTASQLCLUSIG\SIGDIMAR"
+#         database = 'SIGDIMAR'
+#         username = settings.username
+#         password = settings.password
+#
+#         cnxn = pyodbc.connect('DRIVER={SQL Server};SERVER=' + server + ';DATABASE=' +
+#                               database + ';UID=' + username + ';PWD=' + password)
+#
+#         dataframe = pd.read_sql_query('SELECT * FROM [Esquema_Vienos].[' + table + ']', cnxn)  # .round(2)
+#         dataframe.drop('OBJECTID', axis=1, inplace=True)
+#         return dataframe
+#
+#     except:
+#         raise
 
 
 def get_data(table):
 
+    # try:
+    #     dataframe = df_from_db(table)
+    #     dataframe.to_csv(table + '.csv', index=False)
+    #     print(table, ': Online')
+    #
+    # except:
+
     try:
-        dataframe = df_from_db(table)
-        dataframe.to_csv(table + '.csv', index=False)
-        print(table, ': Online')
-
+        dataframe = df_from_local(table + '.csv')
+        print(table, ': Local')
     except:
-
-        try:
-            dataframe = df_from_local(table + '.csv')
-            print(table, ': Local')
-        except:
-            raise ValueError("No data source found")
+        raise ValueError("No data source found")
 
     dataframe.replace(-99999, nan, inplace=True)
 
