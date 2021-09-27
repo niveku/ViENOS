@@ -12,23 +12,55 @@ def figure(df, section, pathname, tipo):
     # ------Variable Format--------
 
     variable = pathname.capitalize()   # Controls the column to show
-    if variable in ["Sst", "Ss", "Ssh"]:
+    if variable == "Ssta":
+        variable = "SSTa"
+    elif variable == "Ssa":
+        variable = "SSa"
+    elif variable in ["Sst", "Ss", "Ssh"]:
         variable = variable.upper()
         # mode = 'markers'
         # point_size = 10
 
     # ------Graph Generation--------
 
-    line = dict(shape='linear', color='black', width=1,)
+    line = dict(shape='linear', color='black', width=1)
+    a_line = dict(shape='linear', color='rgba(255,0,170,0.4)', width=2, dash='dashdot')
 
     if variable == 'Wdir':
         df2 = windrose.rose_df(df, mode=0)
         fig = px.bar_polar(df2, r="frecuencia", theta="direccion", color="velocidad",
                            color_discrete_sequence=misc.color_pallete(5))  # px.colors.diverging.Spectral_r)
+
     elif misc.column_is_valid(section, variable):
+
         y_title = misc.get_col_title(variable)
-        fig = go.Figure(data=go.Scatter(x=df.Time, y=df[variable], mode=mode, line=line, marker_size=point_size))
-        fig.update_yaxes(title_text=y_title)  # , zeroline=True, showline=True)
+        variable_a = variable + 'a'
+        fig = go.Figure()
+
+        fig.add_scatter(x=df.Time, y=df[variable], name='Seguimiento',
+                        mode=mode, line=line, marker_size=point_size, yaxis='y1',
+                        fill='tozeroy', fillcolor='rgba(50,50,50,0.4)')
+
+        if variable_a in df.columns:
+
+            fig.add_scatter(x=df.Time, y=df[variable_a], name='Anomalía',
+                            mode=mode, line=a_line, yaxis='y2',
+                            marker_size=0.5)
+
+            fig.update_layout(
+                yaxis=dict(title=y_title, overlaying='y2'),
+                yaxis2=dict(title='Anomalia', side='right'),
+                legend=dict(
+                    orientation="h",
+                    yanchor="bottom",
+                    x=.5,
+                    y=0,
+                    xanchor="center"
+                ),
+            )
+
+        else:
+            fig.update_yaxes(title_text=y_title)  # , zeroline=True, showline=True)
 
     else:
         raise ValueError('404. The pathname is not valid')
@@ -49,6 +81,8 @@ def figure(df, section, pathname, tipo):
         # --------X-Axis Updates -----------
 
         fig.update_xaxes(range=[df[df[variable].notnull()].Time.min(), df[df[variable].notnull()].Time.max()])
+        # fig.update_yaxes(range=[df[df[variable].notnull()][variable].min(),
+        # df[df[variable].notnull()][variable].max()])
         # fig.update_xaxes(rangeslider_visible=True) #SLIDER
 
         if tipo == 'Diaria' or tipo == 'Quincenal':

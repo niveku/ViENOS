@@ -159,6 +159,14 @@ p {
     font-weight: bold;
 }
 
+.p_title_vertical{
+    margin-bottom: 0rem;
+    font-weight: bold;
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
+    text-align: center;
+}
+
 .main_menu {
     padding: 10px;
 }
@@ -192,6 +200,13 @@ p {
     height: calc(99vh - 15px);
     display: flex;
     flex-direction: column;
+}
+.Slider_container{
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: vertical;
+    flex-shrink: 1;
+    flex-basis: 100%;
 }
 
 .Main_container{
@@ -425,7 +440,11 @@ li {
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 
 #depth_slider {
-    min-width: 300px;
+    min-width: auto;
+    padding-right: 30px !important;
+    height: auto !important;
+    /* border: 1px solid black;
+    background: rgb(243, 146, 56); */
 }
 
 .rc-slider-mark-text-active {

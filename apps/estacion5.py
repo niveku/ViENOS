@@ -18,14 +18,21 @@ tabla = components.create_table(df)
 dl_options = components.create_options_downloads()
 dl_section = components.create_download_section(dl_options)
 
+main_container = html.Div(id='Main_estacion5', className='Main_container', children=[])
+
 layout = html.Div(
     id='App_estacion5',
     className='App_container',
     children=[
         html.Div(
-            id='Main_estacion5',
-            className='Main_container',
-            children=[],
+            id='container_estacion5',
+            className='Slider_container',
+            children=[
+                html.P('Profundidad', className='p_title_vertical'),
+                range_slider,
+                html.Div(id='output-range-slider'),
+                main_container,
+            ]
         ),
         html.Div(
             id='opciones_estacion5',
@@ -48,14 +55,6 @@ layout = html.Div(
                 html.Div(
                     className='SubOptions_container',
                     children=[
-                        html.P('Profundidad:', className='p_title'),
-                        range_slider,
-                        html.Div(id='output-range-slider')
-                    ]
-                ),
-                html.Div(
-                    className='SubOptions_container',
-                    children=[
                         html.P('Fuente de Datos:', className='p_title'),
                         components.cecoldo,
                     ]
@@ -70,7 +69,7 @@ layout = html.Div(
 
 @app.callback(
     Output("Main_estacion5", "children"),
-    Output('output-range-slider', 'children'),
+    # Output('output-range-slider', 'children'),
     [Input("tipo", "value"),
      Input("Date_Picker", "start_date"),
      Input("Date_Picker", "end_date"),
@@ -102,7 +101,7 @@ def update_graph(tipo, start_date, end_date, slider_values, pathname):
         try:
             fig, data = graphs.figure(data, section, variable, tipo)
             graph.figure = fig
-            return [graph, components.watermark], f"{slider_values}m"
+            return [graph, components.watermark]  # , f"{slider_values}m"
 
         except ValueError:
-            return [html.Div("Error 404"), components.watermark], f"{slider_values}m"
+            return [html.Div("Error 404"), components.watermark]  # , f"{slider_values}m"
