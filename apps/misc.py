@@ -3,40 +3,40 @@ import colorlover
 import pathlib
 import pandas as pd
 from numpy import nan, rad2deg
-# from threading import Thread
-# import functools
+from threading import Thread
+import functools
 
 
 # -------- TIMEOUT FUNCTION ----------------
-# def timeout(seconds_before_timeout):
-#     """
-#     https://stackoverflow.com/a/48980413/16825309
-#     """
-#     def deco(func):
-#         @functools.wraps(func)
-#         def wrapper(*args, **kwargs):
-#             res = [Exception('function [%s]timeout [%s seconds] exceeded!' %
-#                              (func.__name__, seconds_before_timeout))]
-#
-#             def newFunc():
-#                 try:
-#                     res[0] = func(*args, **kwargs)
-#                 except Exception as e:
-#                     res[0] = e
-#             t = Thread(target=newFunc)
-#             t.daemon = True
-#             try:
-#                 t.start()
-#                 t.join(seconds_before_timeout)
-#             except Exception as e:
-#                 print('error starting thread')
-#                 raise e
-#             ret = res[0]
-#             if isinstance(ret, BaseException):
-#                 raise ret
-#             return ret
-#         return wrapper
-#     return deco
+def timeout(seconds_before_timeout):
+    """
+    https://stackoverflow.com/a/48980413/16825309
+    """
+    def deco(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            res = [Exception('function [%s]timeout [%s seconds] exceeded!' %
+                             (func.__name__, seconds_before_timeout))]
+
+            def newFunc():
+                try:
+                    res[0] = func(*args, **kwargs)
+                except Exception as e:
+                    res[0] = e
+            t = Thread(target=newFunc)
+            t.daemon = True
+            try:
+                t.start()
+                t.join(seconds_before_timeout)
+            except Exception as e:
+                print('error starting thread')
+                raise e
+            ret = res[0]
+            if isinstance(ret, BaseException):
+                raise ret
+            return ret
+        return wrapper
+    return deco
 
 
 path = pathlib.Path(__file__).parent
@@ -97,7 +97,7 @@ def df_from_local(file_name):
     return dataframe
 
 
-# @timeout(0.5)
+@timeout(0.5)
 def df_from_db(table):
     """
     :arg table: Valid inputs TUMACO_METEO_H, TUMACO_METEO_FCST_H,
