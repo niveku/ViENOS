@@ -23,8 +23,9 @@ def figure(df, section, pathname, tipo):
 
     # ------Graph Generation--------
 
+    std = df[variable].std()
     line = dict(shape='linear', color='black', width=1)
-    a_line = dict(shape='linear', color='rgba(255,0,170,0.4)', width=2, dash='dashdot')
+    # a_line = dict(shape='linear', color='rgba(255,0,170,0.4)', width=2, dash='dashdot')
 
     if variable == 'Wdir':
         df2 = windrose.rose_df(df, mode=0)
@@ -34,33 +35,33 @@ def figure(df, section, pathname, tipo):
     elif misc.column_is_valid(section, variable):
 
         y_title = misc.get_col_title(variable)
-        variable_a = variable + 'a'
+        # variable_a = variable + 'a'
         fig = go.Figure()
 
         fig.add_scatter(x=df.Time, y=df[variable], name='Seguimiento',
                         mode=mode, line=line, marker_size=point_size, yaxis='y1',
                         fill='tozeroy', fillcolor='rgba(50,50,50,0.4)')
 
-        if variable_a in df.columns:
+        # if variable_a in df.columns:
+        #
+        #     fig.add_scatter(x=df.Time, y=df[variable_a], name='Anomalía',
+        #                     mode=mode, line=a_line, yaxis='y2',
+        #                     marker_size=0.5)
+        #
+        #     fig.update_layout(
+        #         yaxis=dict(title=y_title, overlaying='y2'),
+        #         yaxis2=dict(title='Anomalia', side='right'),
+        #         legend=dict(
+        #             orientation="h",
+        #             yanchor="bottom",
+        #             x=.5,
+        #             y=0,
+        #             xanchor="center"
+        #         ),
+        #     )
 
-            fig.add_scatter(x=df.Time, y=df[variable_a], name='Anomalía',
-                            mode=mode, line=a_line, yaxis='y2',
-                            marker_size=0.5)
-
-            fig.update_layout(
-                yaxis=dict(title=y_title, overlaying='y2'),
-                yaxis2=dict(title='Anomalia', side='right'),
-                legend=dict(
-                    orientation="h",
-                    yanchor="bottom",
-                    x=.5,
-                    y=0,
-                    xanchor="center"
-                ),
-            )
-
-        else:
-            fig.update_yaxes(title_text=y_title)  # , zeroline=True, showline=True)
+        # else:
+        fig.update_yaxes(title_text=y_title)  # , zeroline=True, showline=True)
 
     else:
         raise ValueError('404. The pathname is not valid')
@@ -81,7 +82,8 @@ def figure(df, section, pathname, tipo):
         # --------X-Axis Updates -----------
 
         fig.update_xaxes(range=[df[df[variable].notnull()].Time.min(), df[df[variable].notnull()].Time.max()])
-        # fig.update_yaxes(range=[df[df[variable].notnull()][variable].min(),
+        fig.update_yaxes(range=[df[df[variable].notnull()][variable].min()-std,
+                                df[df[variable].notnull()][variable].max()+std])
         # df[df[variable].notnull()][variable].max()])
         # fig.update_xaxes(rangeslider_visible=True) #SLIDER
 
@@ -100,17 +102,17 @@ def figure(df, section, pathname, tipo):
             maximo = round(df[variable].max(), 2)
             minimo = round(df[variable].min(), 2)
             promedio = round(df[variable].mean(), 2)
-            std = df[variable].std() / 10
+
             # ---Max---
             fig.add_hline(y=maximo, line_width=3, line_dash="dash", line_color="red")
-            fig.add_hrect(y0=maximo - std, y1=maximo + std,
+            fig.add_hrect(y0=maximo - (std/10), y1=maximo + (std/10),
                           line_width=0, annotation_text=f"Max: {maximo}",
                           annotation_font_size=18, annotation_font_color="black",
                           annotation_position="bottom right",
                           fillcolor="red", opacity=0.2)
             # ---MIN---
             fig.add_hline(y=minimo, line_width=3, line_dash="dash", line_color="skyblue")
-            fig.add_hrect(y0=minimo - std, y1=minimo + std,
+            fig.add_hrect(y0=minimo - (std/10), y1=minimo + (std/10),
                           line_width=0, annotation_text=f"Min: {minimo}",
                           annotation_font_size=18, annotation_font_color="black",
                           annotation_position="top right",

@@ -84,7 +84,7 @@ def display_page(pathname):
             html.Br(),
             dcc.Link('- Salinidad', href='/estacion5/ss', className='sub_menu'),
             html.Br(),
-            dcc.Link('- Anomalía: Salinidad', href='/estacion5/ss', className='sub_menu'),
+            dcc.Link('- Anomalía: Salinidad', href='/estacion5/ssa', className='sub_menu'),
             html.Br(),
             dcc.Link('- Tabla de Datos', href='/estacion5/table', className='sub_menu'),
             html.Br(),

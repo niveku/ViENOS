@@ -76,14 +76,14 @@ layout = html.Div(
      Input("depth_slider", "value"),
      State('url', 'pathname')]
 )
-def update_graph(tipo, start_date, end_date, slider_values, pathname):
+def update_graph(tipo, start_date, end_date, slider_value, pathname):
 
     section, variable = misc.path_extract(pathname)
 
     # --------Date Filter/Group---------
 
     mask_date = misc.data_filter(df.Time, start_date, end_date)
-    mask_depth = misc.data_filter(df.Depth, slider_values[0], slider_values[1]+1)
+    mask_depth = misc.data_filter(df.Depth, slider_value, slider_value+1)
     mask = mask_date & mask_depth
     data = misc.data_tipo(df, tipo, mask)
 
@@ -95,7 +95,7 @@ def update_graph(tipo, start_date, end_date, slider_values, pathname):
         tabla.style_data_conditional = styles
         tabla.columns = [{"name": misc.get_col_title(i), "id": i} for i in data.columns]
         tabla.data = data.round(2).to_dict('records')
-        return [tabla, components.watermark], f"{slider_values}m"  # , dl_section]
+        return [tabla, components.watermark], f"{slider_value}m"  # , dl_section]
 
     else:
         try:

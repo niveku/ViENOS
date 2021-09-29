@@ -71,16 +71,17 @@ def create_time_options(lst_options):
 
 def create_range_slider(column, item_id):
     mini = max(int(column.min()) - 1, 0)
-    maxi = min(int(column.max()), 100)
-    range_slider = dcc.RangeSlider(
+    maxi = min(int(column.max()), 80)
+    range_slider = dcc.Slider(
         id=item_id,
         min=mini,
         max=maxi,
-        step=5,
-        marks={i: "{}m".format(i) for i in range(mini, maxi + 1, 10)},
-        allowCross=False,
-        pushable=5,
-        value=[mini, maxi],
+        step=10,
+        marks={i: {'label': "{}m".format(i)}  # , 'style': {'transform': 'rotate(180deg)'}}
+               for i in range(mini, maxi + 1, 10)},
+        # allowCross=False,
+        # pushable=5,
+        value=mini,  # [mini, maxi],
         vertical=True,
     )
     return range_slider

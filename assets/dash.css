@@ -443,7 +443,8 @@ li {
     min-width: auto;
     padding-right: 30px !important;
     height: auto !important;
-    /* border: 1px solid black;
+    /*transform: rotate(180deg);
+    border: 1px solid black;
     background: rgb(243, 146, 56); */
 }
 
