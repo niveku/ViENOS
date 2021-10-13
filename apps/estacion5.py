@@ -30,7 +30,7 @@ layout = html.Div(
             children=[
                 html.P('Profundidad', className='p_title_vertical'),
                 range_slider,
-                html.Div(id='output-range-slider'),
+                #html.Div(id='output-range-slider'),
                 main_container,
             ]
         ),
@@ -50,13 +50,6 @@ layout = html.Div(
                     children=[
                         html.P('Agrupación temporal:', className='p_title'),
                         time_options,
-                    ]
-                ),
-                html.Div(
-                    className='SubOptions_container',
-                    children=[
-                        html.P('Fuente de Datos:', className='p_title'),
-                        components.cecoldo,
                     ]
                 ),
             ]
@@ -90,12 +83,12 @@ def update_graph(tipo, start_date, end_date, slider_value, pathname):
     # ------- FIGURE/TABLE
 
     if variable == 'table':
-        cols = ["SST", "SS", "Depth"]
-        (styles, legend) = misc.discrete_background_color_bins(data[cols])  # Table Style
+        cols = ["SST", "SSTa", "SS", "SSa"]
+        (styles, _) = misc.discrete_background_color_bins(data[cols])  # Table Style
         tabla.style_data_conditional = styles
         tabla.columns = [{"name": misc.get_col_title(i), "id": i} for i in data.columns]
         tabla.data = data.round(2).to_dict('records')
-        return [tabla, components.watermark], f"{slider_value}m"  # , dl_section]
+        return [tabla, components.watermark]  # , f"{slider_value}m"  # , dl_section]
 
     else:
         try:

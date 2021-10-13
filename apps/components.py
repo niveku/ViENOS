@@ -4,6 +4,7 @@ import dash_table
 
 from app import app
 from pandas import to_datetime
+from apps import misc
 
 watermark = html.Img(
     src=app.get_asset_url("watermark.png"),
@@ -106,15 +107,17 @@ def create_graph():
 def create_table(df):
     table = dash_table.DataTable(
         id='table',
-        columns=[{"name": i, "id": i} for i in df.columns],
+        columns=[{"name": misc.get_col_title(i), "id": i} for i in df.columns],
         data=df.round(2).to_dict('records'),
         fixed_rows={'headers': True},
-        virtualization=True,
-        page_action='native',
-        page_size=24,
+        # virtualization=True,
+        # page_action='native',
+        # page_size=24,
         sort_action="native",
 
         style_cell={
+            'height': 'auto',
+            'minWidth': '40px',
             'whiteSpace': 'normal',
             'textAlign': 'center',
         },
@@ -126,8 +129,10 @@ def create_table(df):
         },
         style_table={
             'height': '100%',
-            # 'max-height': 'calc(90vh - 10px)',
+            'max-width': '100%',
+            'max-height': 'calc(90vh - 10px)',
             'overflowY': 'overlay',
+            'overflowX': 'scroll',
         },
     )
     return table

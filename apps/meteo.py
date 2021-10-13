@@ -46,13 +46,6 @@ layout = html.Div(
                         time_options,
                     ]
                 ),
-                html.Div(
-                    className='SubOptions_container',
-                    children=[
-                        html.P('Fuente de Datos:', className='p_title'),
-                        components.cecoldo,
-                    ]
-                ),
             ]
         ),
     ]

@@ -201,6 +201,7 @@ p {
     display: flex;
     flex-direction: column;
 }
+
 .Slider_container{
     box-sizing: border-box;
     display: flex;
@@ -441,7 +442,7 @@ li {
 
 #depth_slider {
     min-width: auto;
-    padding-right: 30px !important;
+    padding-right: 35px !important;
     height: auto !important;
     /*transform: rotate(180deg);
     border: 1px solid black;

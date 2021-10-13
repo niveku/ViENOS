@@ -25,7 +25,6 @@ def figure(df, section, pathname, tipo):
 
     std = df[variable].std()
     line = dict(shape='linear', color='black', width=1)
-    # a_line = dict(shape='linear', color='rgba(255,0,170,0.4)', width=2, dash='dashdot')
 
     if variable == 'Wdir':
         df2 = windrose.rose_df(df, mode=0)
@@ -35,32 +34,11 @@ def figure(df, section, pathname, tipo):
     elif misc.column_is_valid(section, variable):
 
         y_title = misc.get_col_title(variable)
-        # variable_a = variable + 'a'
         fig = go.Figure()
-
         fig.add_scatter(x=df.Time, y=df[variable], name='Seguimiento',
                         mode=mode, line=line, marker_size=point_size, yaxis='y1',
                         fill='tozeroy', fillcolor='rgba(50,50,50,0.4)')
 
-        # if variable_a in df.columns:
-        #
-        #     fig.add_scatter(x=df.Time, y=df[variable_a], name='Anomalía',
-        #                     mode=mode, line=a_line, yaxis='y2',
-        #                     marker_size=0.5)
-        #
-        #     fig.update_layout(
-        #         yaxis=dict(title=y_title, overlaying='y2'),
-        #         yaxis2=dict(title='Anomalia', side='right'),
-        #         legend=dict(
-        #             orientation="h",
-        #             yanchor="bottom",
-        #             x=.5,
-        #             y=0,
-        #             xanchor="center"
-        #         ),
-        #     )
-
-        # else:
         fig.update_yaxes(title_text=y_title)  # , zeroline=True, showline=True)
 
     else:
@@ -81,7 +59,8 @@ def figure(df, section, pathname, tipo):
 
         # --------X-Axis Updates -----------
 
-        fig.update_xaxes(range=[df[df[variable].notnull()].Time.min(), df[df[variable].notnull()].Time.max()])
+        fig.update_xaxes(range=[df[df[variable].notnull()].Time.min(),
+                                df[df[variable].notnull()].Time.max()])
         fig.update_yaxes(range=[df[df[variable].notnull()][variable].min()-std,
                                 df[df[variable].notnull()][variable].max()+std])
         # df[df[variable].notnull()][variable].max()])
