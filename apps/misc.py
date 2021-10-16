@@ -106,7 +106,7 @@ def df_from_db(table):
 
     try:
         import settings
-        import pyodbcas
+        import pyodbcas #FORCED BUG
 
         server = "BTASQLCLUSIG\SIGDIMAR"
         database = 'SIGDIMAR'
