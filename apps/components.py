@@ -84,6 +84,7 @@ def create_range_slider(column, item_id):
         # pushable=5,
         value=mini,  # [mini, maxi],
         vertical=True,
+        updatemode='drag',
     )
     return range_slider
 
