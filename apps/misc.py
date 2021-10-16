@@ -50,7 +50,7 @@ dict_cols = {
     'SST': 'Temp. del Mar (°C)',
     'SSTa': 'Anomalía Temp. del Mar (°C)',
     'SSH': 'Nivel del Mar (cm)',
-    'SS': 'Salinidad (g/L)',
+    'SS': 'Salinidad (PSU)',
     'SSa': 'Anomalía Salinidad (g/L)',
     'Depth': 'Profundidad (m)',
     'Long': 'Longitud',
@@ -106,7 +106,7 @@ def df_from_db(table):
 
     try:
         import settings
-        import pyodbc
+        import pyodbcas
 
         server = "BTASQLCLUSIG\SIGDIMAR"
         database = 'SIGDIMAR'
@@ -117,7 +117,8 @@ def df_from_db(table):
                               database + ';UID=' + username + ';PWD=' + password)
 
         dataframe = pd.read_sql_query('SELECT * FROM [Esquema_Vienos].[' + table + ']', cnxn)  # .round(2)
-        dataframe.drop('OBJECTID', axis=1, inplace=True)
+        dataframe.drop(['OBJECTID', 'created_user', 'created_date', 'last_edited_user', 'last_edited_date'],
+                       axis=1, inplace=True)
         return dataframe
 
     except:
@@ -129,7 +130,7 @@ def get_data(table):
     dataframe = pd.DataFrame()
     try:
         dataframe = df_from_db(table)
-        dataframe.to_csv(table + '.csv', index=False)
+        # dataframe.to_csv(data_path.joinpath(table + '.csv'), index=False)
         print(table, ': Online')
 
     except:
@@ -176,20 +177,42 @@ def data_filter(df_column, start, end):
     return mask
 
 
+def data_filter_depth(df_column, start, end):
+    mask = df_column.notnull()
+
+    if start and end:
+        mask = (df_column >= start) & (df_column <= end)
+    elif start:
+        mask = df_column >= start
+    elif end:
+        mask = df_column <= end
+
+    return mask
+
+
 def data_tipo(df, tipo, mask):
 
+    grouper = []
+    if "Depth" in df.columns:
+        grouper.append("Depth")
+
     if tipo == 'Diaria' or tipo == 'Quincenal':
-        df2 = df[mask].groupby(df.Time.dt.date).mean().round(2).reset_index()
+        grouper.insert(0, df.Time.dt.date)
+        df2 = df[mask].groupby(grouper).mean().round(2).reset_index()
         # data['Fecha'] = data.Time.dt.strftime('%d de %B del %Y')
     elif tipo == 'Semanal':
-        df2 = df[mask].groupby(df.Time.dt.strftime('%Y:S%w')).mean().round(2).reset_index()
+        grouper.insert(0, df.Time.dt.strftime('%Y:S%w'))
+        df2 = df[mask].groupby(grouper).mean().round(2).reset_index()
     elif tipo == 'Mensual':
-        df2 = df[mask].groupby(df.Time.dt.strftime('%Y/%m')).mean().round(2).reset_index()
+        grouper.insert(0, df.Time.dt.strftime('%Y/%m'))
+        df2 = df[mask].groupby(grouper).mean().round(2).reset_index()
     elif tipo == 'Trimestral':
-        df2 = df[mask].groupby(df.Time.dt.to_period('Q')).mean().round(2).reset_index()
+        grouper.insert(0, df.Time.dt.to_period('Q'))
+        df2 = df[mask].groupby(grouper).mean().round(2).reset_index()
         df2.Time = df2.Time.astype(str).str.replace('Q', ':T')
     elif tipo == 'Anual':
-        df2 = df[mask].groupby(df.Time.dt.strftime('%Y')).mean().round(2).reset_index()
+        grouper.insert(df.Time.dt.strftime('%Y'))
+        df2 = df[mask].groupby(grouper).mean().round(2).reset_index()
     else:
         df2 = df[mask].round(2)
 

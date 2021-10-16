@@ -88,6 +88,28 @@ def create_range_slider(column, item_id):
     return range_slider
 
 
+def create_min_max_input(min_int, max_int):
+
+    min_inp = dcc.Input(
+        id="input_min_depth", type="number", placeholder="Min",
+        min=min_int, max=max_int-1, step=1,
+        style={
+            'margin': '0px 10px 0px 5px',
+            'border-radius': '4px',
+            'border': '1px solid black',
+            },
+    )
+    max_inp = dcc.Input(
+        id="input_max_depth", type="number", placeholder="Max",
+        min=min_int+1, max=max_int, step=1,
+        style={
+            'border-radius': '4px',
+            'border': '1px solid black',
+            },
+    )
+    return min_inp, max_inp
+
+
 def create_graph():
     graph = dcc.Graph(
         id="time-series-chart",
@@ -110,9 +132,9 @@ def create_table(df):
         columns=[{"name": misc.get_col_title(i), "id": i} for i in df.columns],
         data=df.round(2).to_dict('records'),
         fixed_rows={'headers': True},
-        # virtualization=True,
-        # page_action='native',
-        # page_size=24,
+        virtualization=True,
+        page_action='native',
+        page_size=100,
         sort_action="native",
 
         style_cell={
@@ -130,9 +152,9 @@ def create_table(df):
         style_table={
             'height': '100%',
             'max-width': '100%',
-            'max-height': 'calc(90vh - 10px)',
-            'overflowY': 'overlay',
-            'overflowX': 'scroll',
+            'max-height': 'calc(92vh - 10px)',
+            'overflowY': 'auto',
+            'overflowX': 'auto',
         },
     )
     return table

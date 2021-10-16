@@ -492,24 +492,25 @@ td:last-child {
 td.CalendarDay {
   padding: 0;
 }
-
+/**
 .dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner.dash-fill-width .cell-0-1, .dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner.dash-fill-width .cell-1-1 {
     flex: 1 0 auto;
     height: inherit !important;
 }
 
 .dash-spreadsheet.dash-freeze-top, .dash-spreadsheet.dash-virtualized, cell cell-1-1 dash-fixed-content{
-    height: inherit !important;
+    height: calc(100%-20px) !important;
     max-height: inherit !important;
 }
+*/
 
 .dash-table-container{
-    position: relative;
-    display: flex;
-    max-height: calc(90vh - 10px) !important;
-    flex-direction: column;
+    /**position: relative;
+    display: flex;*/
+    height: calc(100% - 50px) !important;
+    /**flex-direction: column;
     flex-shrink: 1;
-    flex-basis: 100%;
+    flex-basis: 100%;*/
 }
 
 .dash-table-container .row{
