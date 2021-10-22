@@ -2,6 +2,8 @@ import dash_html_components as html
 import colorlover
 import pathlib
 import pandas as pd
+import pyodbc
+import settings #manages user and passwords
 from numpy import nan, rad2deg
 from threading import Thread
 import functools
@@ -105,8 +107,6 @@ def df_from_db(table):
     """
 
     try:
-        import settings
-        import pyodbcas #FORCED BUG
 
         server = "BTASQLCLUSIG\SIGDIMAR"
         database = 'SIGDIMAR'
@@ -118,7 +118,7 @@ def df_from_db(table):
 
         dataframe = pd.read_sql_query('SELECT * FROM [Esquema_Vienos].[' + table + ']', cnxn)  # .round(2)
         dataframe.drop(['OBJECTID', 'created_user', 'created_date', 'last_edited_user', 'last_edited_date'],
-                       axis=1, inplace=True)
+                       axis=1, inplace=True, errors='ignore')
         return dataframe
 
     except:
@@ -177,15 +177,11 @@ def data_filter(df_column, start, end):
     return mask
 
 
-def data_filter_depth(df_column, start, end):
+def data_filter_depth(df_column, depth):
     mask = df_column.notnull()
 
-    if start and end:
-        mask = (df_column >= start) & (df_column <= end)
-    elif start:
-        mask = df_column >= start
-    elif end:
-        mask = df_column <= end
+    if depth:
+        mask = df_column == depth
 
     return mask
 

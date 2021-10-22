@@ -111,6 +111,21 @@ def create_min_max_input(min_int, max_int):
     return min_inp, max_inp
 
 
+def create_depth_input(min_int, max_int):
+
+    inp = dcc.Input(
+        id="input_depth", type="number", placeholder="----",
+        min=min_int, max=max_int, step=1,
+        style={
+            'margin': '0px 10px 0px 5px',
+            'border-radius': '4px',
+            'border': '1px solid black',
+            },
+    )
+
+    return inp
+
+
 def create_graph():
     graph = dcc.Graph(
         id="time-series-chart",

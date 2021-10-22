@@ -40,15 +40,8 @@ layout = html.Div(
                 html.Div(
                     className='SubOptions_container',
                     children=[
-                        html.P('Agrupación temporal:', className='p_title'),
+                        html.P('Resolución temporal:', className='p_title'),
                         time_options,
-                    ]
-                ),
-                html.Div(
-                    className='SubOptions_container',
-                    children=[
-                        html.P('Fuente de Datos:', className='p_title'),
-                        components.cecoldo,
                     ]
                 ),
             ]

@@ -12,7 +12,7 @@ df = misc.get_data('ESTACION5_OCEAN_Q')
 
 datepicker = components.create_datepicker(df.Time.min(), df.Time.max())
 time_options = components.create_time_options(['Quincenal', 'Mensual', 'Trimestral'])
-min_inp, max_inp = components.create_min_max_input(0, 80)  # df.Depth.min(), df.Depth.max())
+depth_inp = components.create_depth_input(df.Depth.min(), df.Depth.max())
 tabla = components.create_table(df)
 # dl_options = components.create_options_downloads()
 # dl_section = components.create_download_section(dl_options)
@@ -38,17 +38,15 @@ layout = html.Div(
                 html.Div(
                     className='SubOptions_container',
                     children=[
-                        html.P('Agrupación temporal:', className='p_title'),
+                        html.P('Resolución temporal:', className='p_title'),
                         time_options,
                     ]
                 ),
                 html.Div(
                     className='SubOptions_container',
                     children=[
-                        html.P('Rango Profundidad: ', className='p_title'),
-                        min_inp,
-                        html.Br(),
-                        max_inp,
+                        html.P('Profundidad: ', className='p_title'),
+                        depth_inp,
                     ]
                 ),
             ]
@@ -64,15 +62,14 @@ layout = html.Div(
     [Input("tipo", "value"),
      Input("Date_Picker", "start_date"),
      Input("Date_Picker", "end_date"),
-     Input("input_min_depth", "value"),
-     Input("input_max_depth", "value")]
+     Input("input_depth", "value")]
 )
-def update_table(tipo, start_date, end_date, min_depth, max_depth):
+def update_table(tipo, start_date, end_date, depth):
 
     # --------Date Filter/Group---------
 
     mask_date = misc.data_filter(df.Time, start_date, end_date)
-    mask_depth = misc.data_filter_depth(df.Depth, min_depth, max_depth)
+    mask_depth = misc.data_filter_depth(df.Depth, depth)
     mask = mask_date & mask_depth
     data = misc.data_tipo(df, tipo, mask)
 
