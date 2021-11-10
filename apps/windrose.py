@@ -15,7 +15,6 @@ def degToCompass(num, mode=0, divisiones=16):
         val = int((num/22.5)+.5)
         return direc[(val % divisiones)]
     else:
-        print(num)
         return direc[0]
 
 

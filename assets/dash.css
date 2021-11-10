@@ -521,7 +521,7 @@ td.CalendarDay {
 .dash-table-container{
     /**position: relative;
     display: flex;*/
-    height: calc(100% - 50px) !important;
+    height: calc(100vh - 120px) !important;
     /**flex-direction: column;
     flex-shrink: 1;
     flex-basis: 100%;*/
