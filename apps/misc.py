@@ -3,7 +3,7 @@ import colorlover
 import pathlib
 import pandas as pd
 import pyodbc
-import settings #manages user and passwords
+import settings  # Archivo que tiene usuarios y contraseñas
 from numpy import nan, rad2deg
 from threading import Thread
 import functools

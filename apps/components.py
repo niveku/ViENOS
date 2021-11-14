@@ -10,7 +10,7 @@ from app import app  # Conexión a la aplicación principal
 from apps import misc
 from pandas import to_datetime
 
-# Marca de agua de Dimar
+# Marca de agua de Dimar. Se centra con el CSS
 watermark = html.Img(
     src=app.get_asset_url("watermark.png"),
     className='Watermark',

@@ -1,3 +1,7 @@
+"""
+Modulo que maneja la página principal y las conexiones a las distintas páginas de la aplicación.
+Además, cuanta con un pequeño menú de vínculos útil para el desarrollo.
+"""
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
@@ -8,11 +12,13 @@ from app import server
 # Connecion to apps files
 from apps import meteo, meteo_fcst, ocean, ocean_fcst, estacion5, estacion5_table
 
+# ---------------- HTML LAYOUT --------------
+
 app.layout = html.Div(
     id='ENOS_APP',
     children=[
         dcc.Location(id='url', refresh=False),
-        # dcc.Download(id="download_data"),
+        # dcc.Download(id="download_data"), componente de descarga en desuso.
         html.Div(
             id='page-content',
             children=[],
@@ -20,11 +26,15 @@ app.layout = html.Div(
     ],
 )
 
+# -------------- CALLBACKS --------------------
+
 
 @app.callback(Output('page-content', 'children'),
               Input('url', 'pathname'))
 def display_page(pathname):
+    """Llama la página de la aplicación correspondiente a la URL o crea una menu de navegación simple."""
 
+    #  Retorna la página de la aplicación requerida.
     if pathname.startswith('/estacion5/table'):
         return estacion5_table.layout
     elif pathname.startswith('/estacion5/'):
@@ -38,7 +48,7 @@ def display_page(pathname):
     elif pathname.startswith('/ocean_fcst/'):
         return ocean_fcst.layout
 
-    else:
+    else:  # Menú de navegación sencillo
         return ([
             html.H6('Meteorología', className='main_menu'),
             dcc.Link('- Temperatura', href='/meteo/temp', className='sub_menu'),

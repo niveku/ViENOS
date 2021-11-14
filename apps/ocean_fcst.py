@@ -81,7 +81,7 @@ def update_graph(tipo, start_date, end_date, pathname):
 
     else:
         try:
-            fig, data = graphs.figure(data, section, variable, tipo)
+            fig, data = graphs.figure(data, variable, tipo)
             graph.figure = fig
             return [graph, components.watermark]
 

@@ -1,3 +1,4 @@
+"""Este modulo se encarga de la creación y validación de los gráficos de la aplicación."""
 import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
@@ -5,13 +6,24 @@ import pandas as pd
 from apps import windrose, misc
 
 
-def figure(df, section, pathname, tipo):
+def figure(df, pathname, tipo):
+    """
+    Genera la gráfica formateada correspondiente a la información y parámetros solicitados.
+    :param df: DataFrame filtrado que contiene la información para crear la gráfica.
+    :param pathname: Variable a graficar extraida de la URL.
+    :param tipo: Agrupación temporal seleccionada.
+    :return: DataFrame, Figure. Devuelve la DataFrame adecuada junto a la gráfica generada.
+    :raise: Error404 En caso de no encontrar las variables que se le indica en la URL
+    """
+
+    # ------- Style and Size --------
 
     mode = 'lines+markers'
     point_size = 5
-    # ------Variable Format--------
 
-    variable = pathname.capitalize()   # Controls the column to show
+    # ------ Variable Format --------
+
+    variable = pathname.capitalize()   # Controla y unifica la variable a mostrar
     if variable == "Ssta":
         variable = "SSTa"
     elif variable == "Ssa":
@@ -23,28 +35,30 @@ def figure(df, section, pathname, tipo):
 
     # ------Graph Generation--------
 
-    std = df[variable].std()
-    line = dict(shape='linear', color='black', width=1)
+    std = df[variable].std()  # Desviación estandar de la variable.
+    line = dict(shape='linear', color='black', width=1)  # Tipo de línea.
 
-    if variable == 'Wdir':
-        df2 = windrose.rose_df(df, mode=0)
+    if variable == 'Wdir':  # Creación de rosa de vientos.
+        df2 = windrose.rose_df(df, mode=0)  # Adecuación de datos para la rosa.
         fig = px.bar_polar(df2, r="frecuencia", theta="direccion", color="velocidad",
-                           color_discrete_sequence=misc.color_pallete(5))  # px.colors.diverging.Spectral_r)
+                           color_discrete_sequence=misc.color_pallete(5))  # Llama los mismo colores de las tablas.
 
-    elif misc.column_is_valid(section, variable):
+    elif misc.column_is_valid(variable):  # Creación otras gráficas.
 
-        y_title = misc.get_col_title(variable)
+        y_title = misc.get_col_title(variable)  # Título del eje y
         fig = go.Figure()
         fig.add_scatter(x=df.Time, y=df[variable], name='Seguimiento',
                         mode=mode, line=line, marker_size=point_size, yaxis='y1',
-                        fill='tozeroy', fillcolor='rgba(50,50,50,0.4)')
+                        fill='tozeroy', fillcolor='rgba(50,50,50,0.4)')  # Relleno de la gráfica
 
-        fig.update_yaxes(title_text=y_title)  # , zeroline=True, showline=True)
+        fig.update_yaxes(title_text=y_title)
 
-    else:
+    else:  # La URL no es válida.
         raise ValueError('404. The pathname is not valid')
 
-    if variable != 'Wdir':
+    # -------------- Style Updates --------------
+
+    if variable != 'Wdir':  # Para las que no son la rosa de viento
 
         # --------Graph Layout Updates -----------
 
@@ -63,8 +77,7 @@ def figure(df, section, pathname, tipo):
                                 df[df[variable].notnull()].Time.max()])
         fig.update_yaxes(range=[df[df[variable].notnull()][variable].min()-std,
                                 df[df[variable].notnull()][variable].max()+std])
-        # df[df[variable].notnull()][variable].max()])
-        # fig.update_xaxes(rangeslider_visible=True) #SLIDER
+        # fig.update_xaxes(rangeslider_visible=True) # Slider dentro de la gráfica.
 
         if tipo == 'Diaria' or tipo == 'Quincenal':
             fig.update_xaxes(tickformat='%d/%m/%Y')
@@ -100,7 +113,7 @@ def figure(df, section, pathname, tipo):
             fig.add_hline(y=promedio, line_width=2, line_dash="dash", line_color="gray",
                           annotation_text=f"Promedio: {promedio}", annotation_font_size=18)
 
-    else:
+    else:  # Para la rosa de vientos.
 
         fig.update_layout(
             autosize=True,
