@@ -73,7 +73,7 @@ def rose_df(df, mode=0):
 
     # ------------- Manejo ---------------
 
-    df2['direccion'] = df2.Wdir.apply(deg_to_compass, mode=mode)
+    df2['direccion'] = df2.Wdir.apply(deg_to_compass, modo=mode)
     df2.sort_values(['direccion', 'Wvel'], ascending=False, inplace=True)
     df2['velocidad'] = pd.cut(df2['Wvel'], bins, labels=names)
     df2['frecuencia'] = 1
