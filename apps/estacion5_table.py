@@ -71,6 +71,7 @@ def update_table(tipo, start_date, end_date, depth):
     Se encarga de la actulización de los contenidos de la tabla de la sección de estación 5.
     Para ello lee y filtra la información de acuerdo los inputs de la página. Se activa automáticamente con cambios
     realizados en los inputs.
+
     :param tipo: Input. Agrupación temporal de los datos.
     :param start_date: Input. Filtro de fecha inicial de los datos.
     :param end_date: Input. Filtro de fecha final de los datos.

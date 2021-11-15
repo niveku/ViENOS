@@ -9,6 +9,7 @@ from apps import windrose, misc
 def figure(df, pathname, tipo):
     """
     Genera la gráfica formateada correspondiente a la información y parámetros solicitados.
+
     :param df: DataFrame filtrado que contiene la información para crear la gráfica.
     :param pathname: Variable a graficar extraida de la URL.
     :param tipo: Agrupación temporal seleccionada.

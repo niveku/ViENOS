@@ -1,9 +1,12 @@
+"""Este módulo se encarga de todas las funciones complementarias de la aplicación. Incluyen entre otras: conexiones a
+bases de datos, carga y adecuación de información, manejos de estilos, entre otros."""
+
 import dash_html_components as html
 import colorlover
 import pathlib
 import pandas as pd
 import pyodbc
-import settings  # Archivo que tiene usuarios y contraseñas
+import settings  # IMPORTANTE: Archivo local que contiene usuarios y contraseñas de la base de datos.
 from numpy import nan, rad2deg
 from threading import Thread
 import functools
@@ -12,7 +15,9 @@ import functools
 # -------- TIMEOUT FUNCTION ----------------
 def timeout(seconds_before_timeout):
     """
-    https://stackoverflow.com/a/48980413/16825309
+    Esta función construye un decorador (@timeout) para generar un timeout. Es decir, permite acabar un proceso cuando
+    este exceda la cantidad de tiempo que se le indica por parámetro. Esta función fue adaptada de la función encontrada
+    en: https://stackoverflow.com/a/48980413/16825309
     """
     def deco(func):
         @functools.wraps(func)
@@ -41,9 +46,9 @@ def timeout(seconds_before_timeout):
     return deco
 
 
-path = pathlib.Path(__file__).parent
-data_path = path.joinpath("../datasets").resolve()
-dict_cols = {
+path = pathlib.Path(__file__).parent  # dirección de la aplicación.
+data_path = path.joinpath("../datasets").resolve()  # dirección de los sets de datos.
+dict_cols = {  # Diccionario con los nombres largos de las variables de la aplicación.
     'Time': 'Fecha/Hora',
     'Temp': 'Temperatura (°C)',
     'Prcp': 'Precipitación (mL)',
@@ -60,9 +65,11 @@ dict_cols = {
 }
 
 
-# ----------DATA MANAGEMENT-------------------------------
+# ---------- MANEJO DE DATOS -----------------------
+
 def path_extract(pathname):
-    pathname = list(filter(None, pathname.strip().lower().split('/')))
+    """Extrae la sección y la variable solicitada en la URL a partir del pathname."""
+    pathname = list(filter(None, pathname.strip().lower().split('/')))  # Separa el pathname en una lista según los "/"
     section = ''
     variable = ''
     if len(pathname) > 0:
@@ -73,12 +80,13 @@ def path_extract(pathname):
     return section, variable
 
 
-def get_col_title(key):
+def get_col_title(variable):
+    """Retorna el título completo de la variable de acuerdo a su variable (Wvel, Wdir, SS, SST, etc)"""
+    return dict_cols[variable]
 
-    return dict_cols[key]
 
-
-def column_is_valid(section, column):
+def column_is_valid(section, variable):
+    """Indica si la variable y sección solicitadas en la URL son válidas"""
     valid_colums = []
     if section == 'meteo' or section == 'meteo_fcst':
         valid_colums = ["Temp", 'Prcp', 'Wvel', 'Wdir']
@@ -87,14 +95,19 @@ def column_is_valid(section, column):
     elif section == 'estacion5':
         valid_colums = ['SST', 'SS', 'SSTa', 'SSa']
 
-    if column in valid_colums:
+    if variable in valid_colums:
         return True
     else:
         return False
 
 
 def df_from_local(file_name):
+    """
+    Lee la información del archivo de respaldo local solicitada y lo devuelve como un DataFrame
 
+    :arg file_name: String. Archivos válidos: TUMACO_METEO_H, TUMACO_METEO_FCST_H, TUMACO_OCEAN_D, TUMACO_OCEAN_FCST_D,
+                                              ESTACION5_OCEAN_Q + .csv
+    """
     dataframe = pd.read_csv(data_path.joinpath(file_name))
     return dataframe
 
@@ -102,21 +115,28 @@ def df_from_local(file_name):
 @timeout(0.5)
 def df_from_db(table):
     """
-    :arg table: Valid inputs TUMACO_METEO_H, TUMACO_METEO_FCST_H,
-    TUMACO_OCEAN_D, TUMACO_OCEAN_FCST_D, ESTACION5_OCEAN_Q
+    Intenta leer la información solicitada en la base de datos con un tiempo límite indicado por el decorador @timeout.
+
+    :arg table: Tablas válidas: TUMACO_METEO_H, TUMACO_METEO_FCST_H, TUMACO_OCEAN_D, TUMACO_OCEAN_FCST_D,
+                                ESTACION5_OCEAN_Q
+    :raises Error: Relanza el mismo error encontrado
+    :return DataFrame con la tabla solicitada.
     """
 
     try:
 
-        server = "BTASQLCLUSIG\SIGDIMAR"
+        server = "BTASQLCLUSIG\\SIGDIMAR"  # Tener cuidado con el "\"
         database = 'SIGDIMAR'
+
+        # Datos provenientes de un archivo local
+
         username = settings.username
         password = settings.password
 
         cnxn = pyodbc.connect('DRIVER={SQL Server};SERVER=' + server + ';DATABASE=' +
                               database + ';UID=' + username + ';PWD=' + password)
 
-        dataframe = pd.read_sql_query('SELECT * FROM [Esquema_Vienos].[' + table + ']', cnxn)  # .round(2)
+        dataframe = pd.read_sql_query('SELECT * FROM [Esquema_Vienos].[' + table + ']', cnxn)
         dataframe.drop(['OBJECTID', 'created_user', 'created_date', 'last_edited_user', 'last_edited_date'],
                        axis=1, inplace=True, errors='ignore')
         return dataframe
@@ -144,7 +164,7 @@ def get_data(table):
     dataframe.replace(-99999, nan, inplace=True)
 
     if 'Wdir' in dataframe.columns:
-        dataframe['Wdir'] = rad2deg(dataframe.Wdir) % 360
+        dataframe['Wdir'] = rad2deg(dataframe.Wdir) % 360  # Convierte a grados positivos [0-360°)
 
     if 'Prcp' in dataframe.columns:
         dataframe['Prcp'] = dataframe.Prcp * 1000
@@ -163,8 +183,11 @@ def get_data(table):
 
     return dataframe
 
+# --------------- Filtros De Datos -----------------------
+
 
 def data_filter(df_column, start, end):
+    """Crea una máscara con la fila del DataFrame y sus límites de inicio y fin para ser usado en un filtro."""
     mask = df_column.notnull()
 
     if start and end:

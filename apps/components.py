@@ -33,7 +33,9 @@ cecoldo = html.A(
 
 
 def create_datepicker(min_date, max_date):
-    """Crea un datepicker limitado por una fecha máxima y mínima. Posee distintos formatos
+    """
+    Crea un datepicker limitado por una fecha máxima y mínima. Posee distintos formatos
+
     :param min_date: fecha mínima del input.
     :param max_date: fecha máxima del input
     :return: un componente HTML funcional de inputs de rangos de fechas.
@@ -66,7 +68,9 @@ def create_datepicker(min_date, max_date):
 
 
 def create_time_options(lst_options):
-    """Crea una lista de inputs tipo Radio a partir de una lista de opciones temporales válidas.
+    """
+    Crea una lista de inputs tipo Radio a partir de una lista de opciones temporales válidas.
+
     @:param lst_options: Una lista con las opciones válidas que incluyen: Diaria, Semanal, Quincenal, Mensual y Anual.
     """
 
@@ -88,6 +92,7 @@ def create_time_options(lst_options):
 def create_range_slider(column, item_id):
     """
     Crea un slider-input de un sólo valor a partir de una columna o lista de datos.
+
     :param column: Columna de DF o lista con los valores a partir de los cuales se extrae los min/max del slider.
     :param item_id: identificador HTML con el cual se selecciona el input creado en los call-backs.
     :return: componente slider-input HTML
@@ -113,6 +118,7 @@ def create_range_slider(column, item_id):
 def create_min_max_input(min_int, max_int):
     """
     Crea un conjunto de dos inputs numéricos para valores mínimos y máximos.
+
     :param min_int: Número entero mínimo recibido en los inputs.
     :param max_int: Número entero máximo recibido en los inputs.
     :return: min_inp, max_inp. Dos inputs numéricos HTML.
@@ -141,6 +147,7 @@ def create_min_max_input(min_int, max_int):
 def create_depth_input(min_int, max_int):
     """
     Crea un componente HTML input de tipo númerico adecuado a cambios de profundidad.
+
     :param min_int: Profundidad mínima recibida
     :param max_int: Profundidad máxima recibida
     :return: Componente HTML de tipo input numérico límitado con los datos de profundidad.
@@ -162,6 +169,7 @@ def create_depth_input(min_int, max_int):
 def create_graph():
     """
     Inicializa y devuelve el componente de gráficos en en el cual se presenta la información gráfica de la app.
+
     :return: Componente dash.Graph inicializado correctamente con id "time-series-chart".
     """
     graph = dcc.Graph(
@@ -182,6 +190,7 @@ def create_graph():
 def create_table(df):
     """
     Inicializa y devuelve el componente de tabla en en el cual se presenta la información tabulada de la app.
+
     :param df: DataFrame a partir de la cual se construye la tabla.
     :return: Componente tabla de dash, inicializado de acuerdo a la DataFrame indicada, con id "table".
     """
@@ -221,6 +230,7 @@ def create_table(df):
 def create_options_downloads():
     """
     (Sin implementar) Crea un componentente HTML de tipo lista desplegable para elegir el tipo de formato de descarga.
+
     :return: Componente desplegable con las opciones de descarga.
     """
     download_options = dcc.Dropdown(
@@ -245,6 +255,7 @@ def create_options_downloads():
 def create_download_section(dl_options):
     """
     (Sin implementar) Crea un DIV HTML con la lista desplegable de formato de descarga y un botón de descarga.
+
     :param dl_options: Componente HTML que maneja la selección de formato de decarga.
     :return: DIV configurado con las opciones de formato y el botón de descarga de datos.
     """

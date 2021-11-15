@@ -8,7 +8,7 @@ from apps import misc, graphs, components
 
 # ----------DATA------------------------
 
-df = misc.get_data('ESTACION5_OCEAN_Q')  # Carga de datos
+df = misc.get_data('ESTACION5_OCEAN_Q')  # Carga los datos
 
 # --------- COMPONENTS -----------------
 
@@ -72,6 +72,7 @@ def update_graph(tipo, start_date, end_date, depth, pathname):
     Se encarga de la actulización de los contenidos de la sección de estación 5.
     Para ello lee y filtra la información de acuerdo los inputs de la página. Se activa automáticamente con cambios
     realizados en los inputs.
+
     :param tipo: Input. Agrupación temporal de los datos.
     :param start_date: Input. Filtro de fecha inicial de los datos.
     :param end_date: Input. Filtro de fecha final de los datos.
@@ -97,4 +98,4 @@ def update_graph(tipo, start_date, end_date, depth, pathname):
         return [graph, components.watermark]  # Actualiza la gráfica de la página junto a la marca de agua.
 
     except ValueError:  # Genera un tecto de error en caso de no ser capáz de generar la gráfica.
-        return [html.Div("Error 404"), components.watermark]  # , f"{slider_values}m"
+        return [html.Div("Error 404"), components.watermark]

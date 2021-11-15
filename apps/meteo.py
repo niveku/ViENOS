@@ -1,3 +1,5 @@
+"""Modulo que se encarga del funcionamiento y presentación de la página de Meteorología (/meteo)."""
+
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 
@@ -6,7 +8,7 @@ from apps import misc, graphs, components
 
 # ----------DATA------------------------
 
-df = misc.get_data('TUMACO_METEO_H')
+df = misc.get_data('TUMACO_METEO_H')  # Carga los datos
 
 # --------- COMPONENTS -----------------
 
@@ -17,7 +19,7 @@ tabla = components.create_table(df)
 dl_options = components.create_options_downloads()
 dl_section = components.create_download_section(dl_options)
 
-# --------- LAYOUT -----------------
+# --------- LAYOUT HTML --------------------
 
 layout = html.Div(
     id='App_Meteo',
@@ -55,14 +57,24 @@ layout = html.Div(
 # --------------CALLBACKS---------------------
 
 @app.callback(
-    Output("Main_Meteo", "children"),
-    [Input("tipo", "value"),
+    Output("Main_Meteo", "children"),  # Actualiza este componente HTML
+    [Input("tipo", "value"),  # Lee y reacciona a los cambios en estos inputs.
      Input("Date_Picker", "start_date"),
      Input("Date_Picker", "end_date"),
-     State('url', 'pathname')]
+     State('url', 'pathname')]  # Lee el estado de la URL
 )
 def update_graph(tipo, start_date, end_date, pathname):
+    """
+    Se encarga de la actulización de los contenidos de la sección de meteorología.
+    Para ello lee y filtra la información de acuerdo los inputs de la página. Se activa automáticamente con cambios
+    realizados en los inputs.
 
+    :param tipo: Input. Agrupación temporal de los datos.
+    :param start_date: Input. Filtro de fecha inicial de los datos.
+    :param end_date: Input. Filtro de fecha final de los datos.
+    :param pathname: State. dirección URL.
+    :return: DIV HTML que actualiza la división de la página.
+    """
     section, variable = misc.path_extract(pathname)
 
     # --------Date Filter/Group---------
@@ -72,23 +84,24 @@ def update_graph(tipo, start_date, end_date, pathname):
 
     # ------- FIGURE/TABLE
 
-    if variable == 'table':
+    if variable == 'table':  # Si se requiere crear una tabla.
         cols = ['Temp', 'Prcp', 'Wvel']
-        (styles, legend) = misc.discrete_background_color_bins(data[cols])  # Table Style
+        (styles, legend) = misc.discrete_background_color_bins(data[cols])  # Estilo de tabla
         tabla.style_data_conditional = styles
         tabla.columns = [{"name": misc.get_col_title(i), "id": i} for i in data.columns]
         tabla.data = data.round(2).to_dict('records')
-        return [tabla, components.watermark]  # , dl_section]
+        return [tabla, components.watermark]  # Actualiza valores de la tabla
 
-    else:
-        try:
+    else:  # Si se requiere crear una gráfica.
+        try:  # Intenta crear la gráfica haciendo validaciones de datos y url.
             fig, data = graphs.figure(data, variable, tipo)
             graph.figure = fig
-            return [graph, components.watermark]
-        except ValueError:
+            return [graph, components.watermark]  # Actualiza la gráfica de la página junto a la marca de agua.
+
+        except ValueError:  # Genera un tecto de error en caso de no ser capáz de generar la gráfica.
             return [html.Div("Error 404"), components.watermark]
 
-
+# ------ DOWLOAD SECTION (NOT IMPLEMENTED) ---------
 # @app.callback(
 #     Output("download_meteo", "data"),
 #     Input("boton_descarga", "n_clicks"),
