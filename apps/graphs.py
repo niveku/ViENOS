@@ -1,4 +1,4 @@
-"""Este modulo se encarga de la creación y validación de los gráficos de la aplicación."""
+"""Módulo se encarga de la creación y validación de los gráficos de la aplicación."""
 import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd

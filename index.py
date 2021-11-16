@@ -1,5 +1,5 @@
 """
-Modulo que maneja la página principal y las conexiones a las distintas páginas de la aplicación.
+Módulo que maneja la página principal y las conexiones a las distintas páginas de la aplicación.
 Además, cuanta con un pequeño menú de vínculos útil para el desarrollo.
 """
 import dash_core_components as dcc

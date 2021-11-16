@@ -1,5 +1,5 @@
 """
-Este módulo se encarga de generar todos los componentes funcionales interactivos de los dashboards.
+Módulo que se encarga de generar todos los componentes funcionales interactivos de los dashboards.
 Es decir, los inputs, sliders, gráficas y tablas.
 """
 import dash_core_components as dcc

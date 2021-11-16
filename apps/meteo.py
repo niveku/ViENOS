@@ -1,4 +1,4 @@
-"""Modulo que se encarga del funcionamiento y presentación de la página de Meteorología (/meteo)."""
+"""Módulo que se encarga del funcionamiento y presentación de la página de Meteorología (/meteo)."""
 
 import dash_html_components as html
 from dash.dependencies import Input, Output, State

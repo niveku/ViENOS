@@ -1,4 +1,4 @@
-"""Este módulo se encarga de todas las funciones complementarias de la aplicación. Incluyen entre otras: conexiones a
+"""Módulo que se encarga de todas las funciones complementarias de la aplicación. Incluyen entre otras: conexiones a
 bases de datos, carga y adecuación de información, manejos de estilos, entre otros."""
 
 import dash_html_components as html

@@ -1,4 +1,4 @@
-"""Modulo que se encarga del funcionamiento y presentación de la página de Predicción Meteorología (/meteo_fcst)."""
+"""Módulo que se encarga del funcionamiento y presentación de la página de Predicción Meteorología (/meteo_fcst)."""
 
 import dash_html_components as html
 from dash.dependencies import Input, Output, State

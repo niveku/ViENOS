@@ -1,4 +1,4 @@
-"""Modulo que se encarga del funcionamiento de la página de predicciones oceanográficas (/ocean_fcst)."""
+"""Módulo que se encarga del funcionamiento de la página de predicciones oceanográficas (/ocean_fcst)."""
 
 import dash_html_components as html
 from dash.dependencies import Input, Output, State

@@ -1,5 +1,5 @@
 """
-Este modulo se encarga de la manipulación de los datos originales para generar un DataFrame adecuado para la
+Módulo que se encarga de la manipulación de los datos originales para generar un DataFrame adecuado para la
 presentación de la información en una rosa de vientos (Rose Diagram). Con las columnas y nombres estandarizados.
 """
 
