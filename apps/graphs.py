@@ -6,7 +6,7 @@ import pandas as pd
 from apps import windrose, misc
 
 
-def figure(df, pathname, tipo):
+def figure(df, section, pathname, tipo):
     """
     Genera la gráfica formateada correspondiente a la información y parámetros solicitados.
 
@@ -44,7 +44,7 @@ def figure(df, pathname, tipo):
         fig = px.bar_polar(df2, r="frecuencia", theta="direccion", color="velocidad",
                            color_discrete_sequence=misc.color_pallete(5))  # Llama los mismo colores de las tablas.
 
-    elif misc.column_is_valid(variable):  # Creación otras gráficas.
+    elif misc.column_is_valid(section, variable):  # Creación otras gráficas.
 
         y_title = misc.get_col_title(variable)  # Título del eje y
         fig = go.Figure()

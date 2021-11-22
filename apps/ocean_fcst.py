@@ -95,7 +95,7 @@ def update_graph(tipo, start_date, end_date, pathname):
 
     else:  # Si se requiere crear una gráfica.
         try:  # Intenta crear la gráfica haciendo validaciones de datos y url.
-            fig, data = graphs.figure(data, variable, tipo)
+            fig, data = graphs.figure(data, section, variable, tipo)
             graph.figure = fig
             return [graph, components.watermark]  # Actualiza la gráfica de la página junto a la marca de agua.
 
