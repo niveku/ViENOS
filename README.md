@@ -12,13 +12,17 @@ ubicado en Tumaco, en el pacífico colombiano.
 1. [Objetivo](https://github.com/niveku/ViENOS#1-objetivo)
 2. [Alcance](https://github.com/niveku/ViENOS#2-alcance)
 3. [Uso](https://github.com/niveku/ViENOS#3-uso)
-   1. [Uso local](https://github.com/niveku/ViENOS#31-uso-local)
+   * [3.1 Uso local](https://github.com/niveku/ViENOS#31-uso-local)
+   * [3.2 Uso de la aplicación](https://github.com/niveku/ViENOS#32-uso-de-la-aplicaci%C3%B3n)
+      - [3.2.1 Navegación](https://github.com/niveku/ViENOS#321-navegaci%C3%B3n)
+      - [3.2.2 Filtros](https://github.com/niveku/ViENOS#322-filtros)
+      - [3.2.3 Gráficos](https://github.com/niveku/ViENOS#323-gr%C3%A1ficos)
 4. [Requerimientos](https://github.com/niveku/ViENOS#4-requerimientos)
-   1. [Librerias](https://github.com/niveku/ViENOS#41-librerias)
-   2. [Otros requerimientos](https://github.com/niveku/ViENOS#42-otros-requerimientos)
+   * [4.1 Librerias](https://github.com/niveku/ViENOS#41-librerias)
+   * [4.2 Otros requerimientos](https://github.com/niveku/ViENOS#42-otros-requerimientos)
 5. [Arquitectura del sistema](https://github.com/niveku/ViENOS#5-arquitectura-del-sistema)
-   1. [Arquitectura de la aplicación](https://github.com/niveku/ViENOS#51-arquitectura-de-la-aplicaci%C3%B3n)
-   2. [Arquitectura de la base de datos](https://github.com/niveku/ViENOS#52-arquitectura-de-la-base-de-datos)
+   * [5.1 Arquitectura de la aplicación](https://github.com/niveku/ViENOS#51-arquitectura-de-la-aplicaci%C3%B3n)
+   * [5.2 Arquitectura de la base de datos](https://github.com/niveku/ViENOS#52-arquitectura-de-la-base-de-datos)
 6. [Licencia](https://github.com/niveku/ViENOS#licencia) 
 
 ## 1. Objetivo
@@ -41,8 +45,12 @@ visualización de dicho datos.
 
 Esta aplicación está en proceso de despliegue, una vez se disponga la dirección web definitiva se hará pública y 
 abierta al público para la consulta y visualización de datos. No obstante, existe una versión de prueba, de una 
-prototípo anterior, que puede encontrarse en:
-https://vienos.herokuapp.com/
+prototípo anterior, que puede encontrarse en: https://vienos.herokuapp.com/
+
+Asimismo, una muestra de cómo se integrará esta aplicación a la plataforma se puede encontrar en el portal
+[VIENOS](https://experience.arcgis.com/experience/4c38ce858add4d22aa68549a7fdd56ad/page/page_0/), en el cual se puede
+apreciar el alcance y objetivos del proyecto, así como la idea para la presentación de información y la integración 
+con esta aplicación web.
 
 ### 3.1 Uso local
 
@@ -64,6 +72,22 @@ desde el IDE de su gusto.
 ```
 $ python index.py
 ```
+
+La aplicación se ejecuta localmente desde este módulo, ya que en este archivo se encuentra la siguiente instrucción.
+```python
+from app import app
+
+if __name__ == '__main__':  # Ejecución local de la aplicación.
+    app.run_server(  # Modo de ejecución de la app.
+        debug=True  # True presenta un menu debugger en la app con callbacks y errores | False = Modo producción
+    )
+```
+>**NOTA:** Cabe resaltar que ejecutando la aplicación desde este archivo (localmente), se iniciará en modo debugger.
+Este modo permite revisar el funcionamiento de los llamados interactivos ("callbacks") y la trazabilidad de los
+errores generados durante la ejecución. Es común que los servidores llamen directamente el módulo de la aplicación por
+lo que no se inicia en modo debugger. Si se llegara a presentar este caso en un ambiente de producción, se debe cambiar
+la configuración de inicio de la aplicación en el servidor.
+
 Una vez el programa se haya ejecutado correctamente, la interfaz podrá ser accedida en la dirección y puerto que indique
 la terminal. Por defecto, el localhost será http://127.0.0.1:8050/
 
@@ -106,7 +130,8 @@ capacidad de análisis. Estas opciones están restringidas por la granularidad t
 de estos. Es tan fácil como hacer clic en las opciones para cambiar entre tipos de agrupación.
 3. Profundidad: Filtro especial para la sección de estación 5, ubicada en la parte izquierda de las gráficas.
 Este filtro permite seleccionar la profundidad única de los datos presentados. Para usarlo solo se debe arrastras la 
-manija (círculo) de la barra de deslizamiento hasta la profundidad deseada. 
+manija (círculo) de la barra de deslizamiento hasta la profundidad deseada. Para el caso de la tabla de la sección 
+"Estación 5", este filtro se cambia por un input numérico sencillo que cumple la misma función.
 
 ![filtros](assets/doc_files/filtros.gif)
 
@@ -122,6 +147,23 @@ los valores asociados en los ejes "X" y "Y". Adicionalmente, se dan unas líneas
 gráfico de líneas, con los valores mínimos, máximos y promedio de los datos presentados.
 
 ![gráficos](assets/doc_files/graph.gif)
+
+#### 3.2.4 Tablas
+
+La aplicación cuenta con secciones de tablas, asociadas a cada sección de datos, en las cuales se presenta la 
+información tabulada, a partir de la cual se contruyen los gráficos presentados en las otras páginas. Estas tablas
+presentan la información con ayudas visuales asociados a la rampa de colores de los datos de cada columna. También,
+permite organizar los datos por los valores de la columna indicada.
+
+Es importante resaltar que cuando se encuentran bastantes datos, la tabla se divide en varias páginas, con un menú de
+navegación ubicado en la parte inferior-derecha. Esto para que los datos sean segmentados y entregados de acuerdo 
+a la necesidad y no saturen la aplicación.
+
+Las tablas cuentan, igualmente, con la división de filtros y opciones, las cuales permiten limitar y agrupar los datos,
+tal cual como se hacen en los gráficos. Esto añade versatilidad al análisis de los datos provistos,
+permitiendo apreciar cambios en diferentes agrupaciones temporales.
+
+![tablas](assets/doc_files/tables.gif)
 
 ## 4. Requerimientos:
 

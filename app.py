@@ -1,14 +1,11 @@
 """Módulo encargado de generar la aplicación principal y el servidor asociado"""
 import dash
 
-# external_stylesheets = [dbc.themes.JOURNAL]
-
 keywords = ('ENOS, Vienos, CIOH, CCCP, Pacífico, Dimar, fenómeno, Fenomeno, Niño, meteorología, oceanografía,'
             'IDE, Marítima, pacific, phenomenon, meteorology, oceanography, temperature, temperatura, mar, sea')
 
 app = dash.Dash(__name__,
                 title='VIENOS App',
-                # external_stylesheets=external_stylesheets,
                 suppress_callback_exceptions=True,
                 meta_tags=[{
                     'name': 'VIENOS App',

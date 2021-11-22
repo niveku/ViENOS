@@ -104,5 +104,7 @@ def display_page(pathname):
         ])
 
 
-if __name__ == '__main__':
-    app.run_server(debug=True)
+if __name__ == '__main__':  # Ejecución local de la aplicación.
+    app.run_server(  # Modo de ejecución de la app.
+        debug=True  # True presenta un menu debugger en la app con callbacks y errores | False = Modo producción
+    )
