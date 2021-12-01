@@ -23,6 +23,7 @@ ubicado en Tumaco, en el pacífico colombiano.
 5. [Arquitectura del sistema](https://github.com/niveku/ViENOS#5-arquitectura-del-sistema)
    * [5.1 Arquitectura de la aplicación](https://github.com/niveku/ViENOS#51-arquitectura-de-la-aplicaci%C3%B3n)
    * [5.2 Arquitectura de la base de datos](https://github.com/niveku/ViENOS#52-arquitectura-de-la-base-de-datos)
+   * [5.3 Arquitectura de la página](https://github.com/niveku/ViENOS#53-arquitectura-de-la-aplicaci%C3%B3n)
 6. [Licencia](https://github.com/niveku/ViENOS#licencia) 
 
 ## 1. Objetivo
@@ -165,6 +166,79 @@ permitiendo apreciar cambios en diferentes agrupaciones temporales.
 
 ![tablas](assets/doc_files/tables.gif)
 
+#### 3.2.5 Despliegue en servidor windows
+
+Para el despliegue en servidor windows (IIS) se deben seguir los siguientes pasos:
+
+1. Habilitar el servicio CGI dentro de los servicios de roles del IIS.
+
+    ![CGI](https://miro.medium.com/max/700/1*Mn7ixv1JN71FoGMziD1EPg.png)
+2. Instalar una instancia de Python, con permisos de administrador, en una carpeta de raíz. Ej. C://Python39.
+Asegurarse de que el usuario que ejecuta el IIS tenga permisos sobre la carpeta.
+3. Instalar todas las librerías requeridas para la ejecución de la app, detallados en 
+[requirements](https://github.com/niveku/ViENOS/blob/main/requirements.txt). Adicionalmente, es necesario
+instalar la librería wfastcgi.
+4. Habilitar el FastCGI desde un comando en una ventana de CMD.
+```
+wfastcgi-enable
+```
+5. Agregar un handler para python en la opción “Handler Mappings” del menú del IIS. Este debe usar el módulo
+FastCgiModule y apuntar al ejecutable de python y al módulo wfastcgi.py.
+
+![handler](assets/doc_files/handler.png)
+6. Crear una nueva página o dirección asociada a la carpeta donde se almacenan todos los datos de la aplicación.
+Configurar los binds: Ip, puerto, hostname y certificado, en caso tal de poseerlo, para que la app funcione en línea.
+
+![binds](assets/doc_files/binds.png)
+7. Revisar en la opción de "Aplication Settings" que la aplicación esté configurada de la siguiente forma 
+(El de WSGI handler debe apuntar al app.server):
+
+![appsettings](assets/doc_files/appsettings.png)
+8. Revisar que en la carpeta de la app se cree un archivo web.config que esté dispuesto de manera similar a esto:
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <system.webServer>
+        <handlers>
+            <remove name="Python" />
+            <add name="pythonCGI" path="*" verb="*" modules="FastCgiModule" 
+            scriptProcessor="C:\Python39\python.exe|C:\Python39\lib\site-packages\wfastcgi.py" 
+            resourceType="Unspecified" requireAccess="Script" />
+        </handlers>
+    </system.webServer>
+    <appSettings>
+        <add key="PYTHONPATH" value="C:\inetpub\VIENOS" />
+        <add key="WSGI_HANDLER" value="app.server" />
+    </appSettings>
+</configuration>
+```
+8. Cambiar los contenidos del archivo index.py al archivo app.py. Esto es necesario, ya que el FastCGI inicia
+la app desde app.py y no desde el index.py, como pasa en una ejecución local.
+```python
+import ...
+
+...
+
+app.layout = html.Div(
+    id='ENOS_APP',
+    children=[
+        dcc.Location(id='url', refresh=False),
+        html.Div(
+            id='page-content',
+            children=[],
+        ),
+    ],
+)
+
+@app.callback(Output('page-content', 'children'),
+              Input('url', 'pathname'))
+def display_page(pathname):
+    ...
+```
+
+Para revisar otros pasos a profundidad, por favor revisar esta 
+[guía](https://medium.com/@dpralay07/deploy-a-python-flask-application-in-iis-server-and-run-on-machine-ip-address-ddb81df8edf3) 
+.
 ## 4. Requerimientos:
 
 La aplicación está construida en python 3.8.5 por lo que se necesitará de un ambiente con Python 3+ con las librerias 
@@ -337,6 +411,81 @@ cnxn = pyodbc.connect(
 
 dataframe = pd.read_sql_query('SELECT * FROM [Esquema_Vienos].[' + table + ']', cnxn)
 ```
+
+### 5.3 Arquitectura de la página
+
+La página cuenta con un índice, el cual actuará como página de inicio para la aplicación alojada en un servicio web.
+Esta página permite a los desarrolladores una fácil navegación a través de las distintas secciones del aplicativo.
+El resto de la aplicación estará dispuesta de la siguiente forma:
+
+```
+root/ (index)
+|
+|--- /meteo 
+    |  /temp
+    |  /prcp
+    |  /wvel
+    |  /wdir
+    |  /table
+|--- /meteo_fcst
+    |  /temp
+    |  /prcp
+    |  /wvel
+    |  /wdir
+    |  /table
+|--- /ocean 
+    |  /sst
+    |  /ssh
+    |  /ss
+    |  /table
+|--- /ocean_fcst
+    |  /sst
+    |  /ssh
+    |  /ss
+    |  /table
+|--- /estacion5
+    |  /sst
+    |  /ssta
+    |  /ss
+    |  /ssa
+    |  /table
+```
+**Página principal**
+- /root: Índice con los enlaces a las diferentes partes funcionales de la aplicación.
+
+**Sección de meteorología**
+
+Conformado por las secciones de /meteo y /meteo_fcst, son divisiones que alojan lás páginas de las variables de 
+información y los pronósticos meteorológicos, respectivamente. Estas secciones no son funcionales por sí solas, ya que 
+requieren de una de las siguientes variables (sub-secciones) para presentar información:
+- /temp (Temperature): Temperatura en un gráfico de líneas.
+- /prcp (Precipitation): Precipitación en un gráfico de líneas
+- /wvel (Wind Velocity): Velocidad (magnitud) del viento en un gráfico de líneas.
+- /wdir (Wind Direction): Velocidad (vector) del viento representado en una rosa de vientos.
+- /table: Tabla (DataFrame) de toda la información del conjunto de datos.
+
+
+**Sección Oceanográfica**
+
+Conformado por las secciones de /ocean y /ocean_fcst, son divisiones que alojan lás páginas de las variables de 
+información y los pronósticos oceanográficos, respectivamente. Estas secciones no son funcionales por sí solas, ya que 
+requieren de una de las siguientes variables (sub-secciones) para presentar información:
+- /sst (Sea Surface Temperature): Temperatura superficial del mar en un gráfico de líneas.
+- /ssh (Sea Surface Height): Nivel del mar en un gráfico de líneas.
+- /ss (Sea Salinity): Salinidad del mar en un gráfico de líneas.
+- /table: Tabla (DataFrame) de toda la información del conjunto de datos.
+
+**Sección "Estación 5"**
+
+Conformado por la sección /estacion5. Esta cuenta con la información del proyecto insignia del CIOH/CCCP pacífico, una
+estación de mediciones oceanográficas ubicada en Tumaco, Nariño. Esta división no es funcional por sí sola, ya que 
+requiere de una de las siguientes variables (sub-secciones) para presentar información:
+- /sst (Sea Surface Temperature): Temperatura superficial del mar en un gráfico de líneas.
+- /ssta (Sea Surface Temperature Anomaly): Anomalía calculada de la temperatura superficial del mar en un gráfico
+de líneas.
+- /ss (Sea Salinity): Salinidad del mar en un gráfico de líneas.
+- /ssa (Sea Salinity Anomaly): Anomalía calculada de la salinidad del mar en un gráfico de líneas.
+- /table: Tabla (DataFrame) de toda la información del conjunto de datos.
 
 ## Licencia
 [MIT](https://choosealicense.com/licenses/mit/)
