@@ -17,13 +17,14 @@ ubicado en Tumaco, en el pacífico colombiano.
       - [3.2.1 Navegación](https://github.com/niveku/ViENOS#321-navegaci%C3%B3n)
       - [3.2.2 Filtros](https://github.com/niveku/ViENOS#322-filtros)
       - [3.2.3 Gráficos](https://github.com/niveku/ViENOS#323-gr%C3%A1ficos)
+      - [3.2.5 Despliegue en servidor windows](https://github.com/niveku/ViENOS#325-despliegue-en-servidor-windows)
 4. [Requerimientos](https://github.com/niveku/ViENOS#4-requerimientos)
    * [4.1 Librerias](https://github.com/niveku/ViENOS#41-librerias)
    * [4.2 Otros requerimientos](https://github.com/niveku/ViENOS#42-otros-requerimientos)
 5. [Arquitectura del sistema](https://github.com/niveku/ViENOS#5-arquitectura-del-sistema)
    * [5.1 Arquitectura de la aplicación](https://github.com/niveku/ViENOS#51-arquitectura-de-la-aplicaci%C3%B3n)
    * [5.2 Arquitectura de la base de datos](https://github.com/niveku/ViENOS#52-arquitectura-de-la-base-de-datos)
-   * [5.3 Arquitectura de la página](https://github.com/niveku/ViENOS#53-arquitectura-de-la-aplicaci%C3%B3n)
+   * [5.3 Arquitectura de la página](https://github.com/niveku/ViENOS#53-arquitectura-de-la-p%C3%A1gina)
 6. [Licencia](https://github.com/niveku/ViENOS#licencia) 
 
 ## 1. Objetivo
@@ -216,7 +217,6 @@ Configurar los binds: Ip, puerto, hostname y certificado, en caso tal de poseerl
 la app desde app.py y no desde el index.py, como pasa en una ejecución local.
 ```python
 import ...
-
 ...
 
 app.layout = html.Div(
