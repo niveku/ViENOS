@@ -186,15 +186,18 @@ wfastcgi-enable
 5. Agregar un handler para python en la opción “Handler Mappings” del menú del IIS. Este debe usar el módulo
 FastCgiModule y apuntar al ejecutable de python y al módulo wfastcgi.py.
 
-![handler](assets/doc_files/handler.png)
+    ![handler](assets/doc_files/handler.png)
+
 6. Crear una nueva página o dirección asociada a la carpeta donde se almacenan todos los datos de la aplicación.
 Configurar los binds: Ip, puerto, hostname y certificado, en caso tal de poseerlo, para que la app funcione en línea.
 
-![binds](assets/doc_files/binds.png)
+    ![binds](assets/doc_files/binds.png)
+
 7. Revisar en la opción de "Aplication Settings" que la aplicación esté configurada de la siguiente forma 
 (El de WSGI handler debe apuntar al app.server):
 
-![appsettings](assets/doc_files/appsettings.png)
+    ![appsettings](assets/doc_files/appsettings.png)
+
 8. Revisar que en la carpeta de la app se cree un archivo web.config que esté dispuesto de manera similar a esto:
 ```
 <?xml version="1.0" encoding="UTF-8"?>
@@ -237,8 +240,7 @@ def display_page(pathname):
 ```
 
 Para revisar otros pasos a profundidad, por favor revisar esta 
-[guía](https://medium.com/@dpralay07/deploy-a-python-flask-application-in-iis-server-and-run-on-machine-ip-address-ddb81df8edf3) 
-.
+[guía](https://medium.com/@dpralay07/deploy-a-python-flask-application-in-iis-server-and-run-on-machine-ip-address-ddb81df8edf3).
 ## 4. Requerimientos:
 
 La aplicación está construida en python 3.8.5 por lo que se necesitará de un ambiente con Python 3+ con las librerias 
